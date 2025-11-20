@@ -1,0 +1,86 @@
+body {
+    font-family: Arial, sans-serif;
+    background-color: #D6EAF8;
+    color: #2C3E50;
+    text-align: center;
+    margin: 0;
+    padding: 20px;
+}
+#cerrarSesion {
+    position: fixed;
+    top: 0;
+    left: 1240px;
+    margin: 10px;
+    padding: 10px;
+    background-color: #24485f;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+.amm{
+    display: block;
+    font-size: 14px;
+    line-height: 1.2;
+    letter-spacing: .16em;
+    color: #a3a3a3;
+}
+#cerrarSesion:hover {
+    background-color: #4083b2;
+}
+.barra {
+    position: fixed;
+    top: 0;
+    left: 0;
+    transform: rotate(0deg); /* o cualquier otro ángulo que desees */
+    transform-origin: top left; /* para que la rotación se centre en la esquina superior izquierda */
+    z-index: 1000; /* para que el elemento se muestre sobre otros elementos */
+}
+.barra_logo {
+    width: 250px; /* ancho de la imagen */
+    height: 60px; /* alto de la imagen */
+    object-fit: contain; /* para que la imagen se ajuste al tamaño sin deformarse */
+}
+
+h1, h2 {
+    color: #154360;
+}
+
+table {
+    width: 80%;
+    margin: 20px auto;
+    border-collapse: collapse;
+    background-color: #EBF5FB;
+    box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.1);
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+th, td {
+    border: 1px solid #AED6F1;
+    padding: 10px;
+    text-align: left;
+}
+
+th {
+    background-color: #85C1E9;
+    color: white;
+}
+
+tr:nth-child(even) {
+    background-color: #D6EAF8;
+}
+
+button {
+    background-color: #5DADE2;
+    color: white;
+    border: none;
+    padding: 8px 12px;
+    margin: 5px;
+    cursor: pointer;
+    border-radius: 5px;
+    transition: background 0.3s;
+}
+
+button:hover {
+    background-color: #2E86C1;
+}
