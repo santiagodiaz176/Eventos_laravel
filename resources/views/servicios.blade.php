@@ -32,54 +32,7 @@
   <div class="page">
 
     {{-- HEADER --}}
-    <header class="section page-header">
-      <div class="rd-navbar-wrap">
-        <nav class="rd-navbar"
-             data-layout="rd-navbar-fixed"
-             data-sm-layout="rd-navbar-fixed"
-             data-md-layout="rd-navbar-static"
-             data-lg-layout="rd-navbar-static"
-             data-md-stick-up="true"
-             data-lg-stick-up="true">
-
-          <div class="rd-navbar-main-outer">
-            <div class="rd-navbar-main">
-              <div class="rd-navbar-panel">
-                <button class="rd-navbar-toggle" data-rd-navbar-toggle=".rd-navbar-nav-wrap"><span></span></button>
-
-                <div class="rd-navbar-brand">
-                  <a class="brand" href="{{ url('/') }}">
-                    <div class="brand__name">
-                      <img class="brand__logo-dark" src="{{ asset('images/DDDD.png') }}" width="237" height="35" alt="Logo Dreams">
-                      <img class="brand__logo-light" src="{{ asset('images/DDDD.png') }}" width="237" height="35" alt="Logo Dreams">
-                    </div>
-                    <span class="brand__slogan">Amamos lo que hacemos</span>
-                  </a>
-                </div>
-              </div>
-              
-                <!-- RD Navbar Nav-->
-                  <ul class="rd-navbar-nav">
-                    <li class="{{ Request::is('/') ? 'active' : '' }}">
-                        <a href="{{ url('/') }}">Inicio<span></span><span></span><span></span><span></span></a>
-                    </li>
-                    <li class="{{ Request::is('quienes-somos') ? 'active' : '' }}">
-                        <a href="{{ url('quienes-somos') }}">Quienes Somos<span></span><span></span><span></span><span></span></a>
-                    </li>
-                    <li class="{{ Request::is('servicios') ? 'active' : '' }}">
-                        <a href="{{ url('servicios') }}">Servicios<span></span><span></span><span></span><span></span></a>
-                    </li>
-                    <li class="{{ Request::is('contacto') ? 'active' : '' }}">
-                        <a href="{{ url('contacto') }}">Contáctenos<span></span><span></span><span></span><span></span></a>
-                    </li>
-                  </ul>
-              </div>
-
-            </div>
-          </div>
-        </nav>
-      </div>
-    </header>
+    @include('partials.navbar')
 
     {{-- BANNER --}}
     <section class="breadcrumbs-custom bg-image" style="background-image: url('{{ asset('images/1111.jpg') }}');">
@@ -106,7 +59,8 @@
             <p class="heading-1">Nuestros servicios.</p>
             <article class="quote-big">
               <p class="q">
-                En nuestra casa de banquetes ofrecemos todo lo que necesitas para hacer de tu celebración un sueño hecho realidad.
+                En nuestra casa de banquetes ofrecemos todo lo que necesitas para que tu celebración sea un sueño hecho realidad.
+                Ven a conocernos y vivir la experiencia que tanto deseaste.
               </p>
             </article>
             <div class="divider"></div>
@@ -181,24 +135,8 @@
       </div>
     </section>
 
-    {{-- FOOTER --}}
-    <footer class="footer-centered section bg-gray-darker">
-      <div class="shell text-center">
-        <a class="brand" href="{{ url('/') }}">
-          <img src="{{ asset('images/invertido.png') }}" width="237" alt="Dreams">
-        </a>
-
-        <ul class="list-icons list-inline-sm">
-          <li><a class="icon icon-sm fa fa-instagram" href="#"></a></li>
-          <li><a class="icon icon-sm fa fa-facebook" href="#"></a></li>
-        </ul>
-
-        <p class="rights">Dreams © <span class="copyright-year"></span> — Design by Dahiana.D</p>
-      </div>
-    </footer>
-
-  </div>
-@endsection
+    @include('partials.footer')
+  @endsection
 
 @section('scripts')
     <script src="{{ asset('js/core.min.js') }}"></script>

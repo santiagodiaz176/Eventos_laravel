@@ -1,12 +1,17 @@
 <?php
 
+use App\Http\Controllers\ContactController;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Http\Request;
 
 // Página principal
 Route::get('/', function () {
     return view('index');
-})->name('index');
+})->name('inicio');
+
+Route::get('/registro', function () {
+    return view('auth.register');
+})->name('registro');
 
 // Página "Acerca de nosotros"
 Route::get('/about', function () {
@@ -14,21 +19,25 @@ Route::get('/about', function () {
 })->name('about');
 
 // Página "Quienes Somos" 
-Route::get('/quienes-somos', function () {
+Route::get('/somos', function () {
     return view('somos');
-})->name('quienes-somos');
+})->name('somos');
 
-// Página "Servicios"
+// Página de Servicios
 Route::get('/servicios', function () {
     return view('servicios');
 })->name('servicios');
+
+// Página de contacto → **ahora con controlador**
+Route::get('/contacto', [ContactController::class, 'index'])->name('contacto');
+Route::post('/contacto', [ContactController::class, 'submit'])->name('contact.submit');
 
 // Página de registro de usuarios
 Route::get('/register', function () {
     return view('auth.register');
 })->name('register');
 
-// Página de inicio de sesión (opcional, pero útil)
+// Página de inicio de sesión
 Route::get('/login', function () {
     return view('auth.login');
 })->name('login');
@@ -39,7 +48,5 @@ Route::post('/newsletter/subscribe', function (Request $request) {
         'email' => 'required|email'
     ]);
 
-    // Aquí puedes guardar el correo en la base de datos o en un archivo si deseas
-    // Por ahora solo devolvemos un mensaje de éxito
     return back()->with('success', '¡Gracias por suscribirte a nuestro boletín!');
 })->name('newsletter.subscribe');
