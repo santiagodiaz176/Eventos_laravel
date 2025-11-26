@@ -4,57 +4,81 @@ use App\Http\Controllers\ContactController;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Http\Request;
 
-// Página principal
+/*
+| Rutas para Visitantes (sin iniciar sesión)
+*/
+
 Route::get('/', function () {
     return view('index');
 })->name('inicio');
 
-// Página Sobre Nosotros
 Route::get('/about', function () {
     return view('about');
 })->name('about');
 
-// Página "Quienes Somos"
 Route::get('/somos', function () {
     return view('somos');
 })->name('somos');
 
-// Quienes somos privado (requiere login)
-Route::get('/somos-privado', function () {
-    return view('somos-privado');
-})->middleware('auth')->name('somos.privado');
-
-// Página Servicios
 Route::get('/servicios', function () {
     return view('servicios');
 })->name('servicios');
 
-// Página Contacto
+// Contacto visitante
 Route::get('/contacto', [ContactController::class, 'index'])->name('contacto');
 Route::post('/contacto', [ContactController::class, 'submit'])->name('contact.submit');
 
-// // Vista de Login
-// Route::get('/login', function () {
-//     return view('auth.register');
-// })->name('login');
-
-// Vista de Registro
+// Registro y Login
 Route::get('/register', function () {
     return view('auth.register');
 })->name('register');
 
-// Página de usuario (requiere login)
-Route::get('/usuario', function () {
-    return view('index_user');
-})->name('usuario');
-// ->middleware('auth')
-    
+// Route::get('/login', function () {
+//     return view('auth.login');
+// })->name('login');
+
+/*
+| Rutas del Usuario Registrado (requiere login)
+*/
+
+Route::middleware(['auth'])->group(function () {
+
+    // Página principal del usuario
+    Route::get('/usuario', function () {
+        return view('user.index_user');
+    })->name('usuario');
+
+    // Servicios del usuario
+    Route::get('/usuario/servicios', function () {
+        return view('user.servicios_user');
+    })->name('usuario.servicios');
+
+    // Somos del usuario
+    Route::get('/usuario/somos', function () {
+        return view('user.somos_Users');
+    })->name('usuario.somos');
+
+    // Contacto del usuario
+    Route::get('/usuario/contacto', [ContactController::class, 'index'])
+        ->name('usuario.contacto');
+
+    Route::post('/usuario/contacto', [ContactController::class, 'submit'])
+        ->name('usuario.contact.submit');
+});
+
+
+/*
+| Logout (solo redirección)
+*/
 Route::get('/logout', function () {
-    // Redirige al inicio del sitio, solo para evitar errores
     return redirect()->route('inicio');
 })->name('logout');
 
-// Suscripción al boletín
+
+/*
+|Newsletter
+*/
+
 Route::post('/newsletter/subscribe', function (Request $request) {
 
     $request->validate([
