@@ -3,6 +3,9 @@
 use App\Http\Controllers\ContactController;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Http\Request;
+use App\Http\Controllers\Auth\RegisterController;
+use App\Http\Controllers\Auth\LoginController;
+use App\Http\Controllers\ReservaController;
 
 /*
 | Rutas para Visitantes (sin iniciar sesión)
@@ -33,9 +36,15 @@ Route::get('/register', function () {
     return view('auth.register');
 })->name('register');
 
-// Route::get('/login', function () {
-//     return view('auth.login');
-// })->name('login');
+Route::post('/register', [RegisterController::class, 'store'])
+    ->name('register.store');
+
+Route::get('/login', function () {
+    return view('auth.login');
+})->name('login');
+
+Route::post('/login', [LoginController::class, 'login'])
+    ->name('login.store');
 
 /*
 | Rutas del Usuario Registrado (requiere login)
@@ -45,17 +54,17 @@ Route::middleware(['auth'])->group(function () {
 
     // Página principal del usuario
     Route::get('/usuario', function () {
-        return view('user.index_user');
+        return view('user/index_user');
     })->name('usuario');
 
     // Servicios del usuario
     Route::get('/usuario/servicios', function () {
-        return view('user.servicios_user');
+        return view('user/servicios.user');
     })->name('usuario.servicios');
 
     // Somos del usuario
     Route::get('/usuario/somos', function () {
-        return view('user.somos_Users');
+        return view('user/somos_users');
     })->name('usuario.somos');
 
     // Contacto del usuario
@@ -64,7 +73,11 @@ Route::middleware(['auth'])->group(function () {
 
     Route::post('/usuario/contacto', [ContactController::class, 'submit'])
         ->name('usuario.contact.submit');
+
+    Route::post('/usuario/reserva', [ReservaController::class, 'store'])
+        ->name('reserva.store');
 });
+
 
 
 /*

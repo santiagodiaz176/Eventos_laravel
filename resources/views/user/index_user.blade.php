@@ -1,4 +1,3 @@
-{{-- Esta Pagina fue hecha/modificada por Dahiana Andrea Duarte Valle --}}
 <!DOCTYPE html>
 <html class="wide wow-animation" lang="es">
 
@@ -95,8 +94,8 @@
 
                                 <ul class="rd-navbar-nav">
                                     <li class="active"><a href="{{ route('usuario') }}">Inicio</a></li>
-                                    <li><a href="{{ route('user.quienes') }}">Quienes Somos</a></li>
-                                    <li><a href="{{ route('user.servicios') }}">Servicios</a></li>
+                                    <li><a href="{{ route('usuario.somos') }}">Quienes Somos</a></li>
+                                    <li><a href="{{ route('usuario.servicios') }}">Servicios</a></li>
                                 </ul>
 
                             </div>

@@ -44,7 +44,7 @@
                                         </div>
 
                                         <div class="form-wrap form-button offset-1">
-                                            <a href="{{ url('register') }}" class="button button-block button-primary-outline button-ujarak">Regístrate</a>
+                                            <a href="{{ url('login') }}" class="button button-block button-primary-outline button-ujarak">Regístrate</a>
                                         </div>
                                     </article>
                                 </div>
