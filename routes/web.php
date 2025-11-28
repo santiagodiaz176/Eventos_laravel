@@ -8,6 +8,8 @@ use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\CitaController;
 use App\Http\Controllers\EventoController;
+use App\Http\Controllers\AdminController;
+use App\Http\Controllers\Admin\UsuarioController;
 
 /*
 | Rutas para Visitantes (sin iniciar sesión)
@@ -99,6 +101,28 @@ Route::middleware(['auth'])->group(function () {
     ->name('reserva.cita');
 });
 
+
+// Rutas del Administrador (requiere login y rol de admin)
+Route::middleware(['auth', 'admin'])->group(function () {
+
+    Route::get('/admin', [AdminController::class, 'index'])
+    ->name('admin.index');
+
+    Route::get('/usuarios/create', [UsuarioController::class, 'create'])
+    ->name('usuarios.create');
+
+    Route::post('/usuarios', [UsuarioController::class, 'store'])
+    ->name('usuarios.store');
+
+    Route::get('/usuarios/{id}/edit', [UsuarioController::class, 'edit'])
+    ->name('usuarios.edit');
+
+    Route::put('/usuarios/{id}', [UsuarioController::class, 'update'])
+    ->name('usuarios.update');
+
+    Route::delete('/usuarios/{id}', [UsuarioController::class, 'destroy'])
+    ->name('usuarios.destroy');
+});
 
 
 /*
