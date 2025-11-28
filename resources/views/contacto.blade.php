@@ -96,8 +96,63 @@
     </div>
 </section>
 
-<!-- Google Maps -->
-<iframe src="https://www.google.com/maps/embed?pb=!1m17!1m12!1m3!1d991.5834721087382!2d-75.61489035201062!3d6.219627206482916!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m2!1m1!2s!5e0!3m2!1ses!2sco!4v1731615607164!5m2!1ses!2sco" width="1350" height="600" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+
+<!-- Mapa -->
+<div id="map" style="height: 500px; width: 100%;"></div>
+
+<!-- Leaflet -->
+<link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+<script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+
+<script>
+  // Crear el mapa
+  var map = L.map('map').setView([6.219627, -75.612793], 17);
+
+  // Cargar mapa de OpenStreetMap
+  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      maxZoom: 19,
+      attribution: '© OpenStreetMap'
+  }).addTo(map);
+
+  // ----------------------------
+  // ICONO PERSONALIZADO
+  // ----------------------------
+var customIcon = L.icon({
+    iconUrl: "https://cdn-icons-png.flaticon.com/512/2776/2776067.png",
+    iconSize: [40, 40],
+    iconAnchor: [20, 40],
+    popupAnchor: [0, -40]
+});
+
+
+  // Marcador Medellín con icono personalizado
+  // Marcador Medellín con icono personalizado
+var marker = L.marker([6.219627, -75.612793], { icon: customIcon }).addTo(map);
+
+// Popup con HTML (texto + botón)
+marker.bindPopup(`
+    <div style="text-align:center;">
+        <h2 style="
+            font-family: 'Great Vibes';">Dream</h2>
+        <button 
+            onclick="window.location.href='../vistas/index1.html'" 
+            style="
+            font-family: 'Josefin Sans', Helvetica, Arial, sans-serif;
+                padding:8px 12px;
+                background:#3465e7;
+                color:white;
+                border:none;
+                border-radius:6px;
+                cursor:pointer;
+                margin-top:5px;
+            ">
+            Registrate
+        </button>
+    </div>
+`).openPopup();
+
+</script>
+
 
 @include('partials.footer')
 
