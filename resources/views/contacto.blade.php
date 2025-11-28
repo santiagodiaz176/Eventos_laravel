@@ -102,6 +102,7 @@
 
 <!-- Leaflet -->
 <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+   <link href="https://fonts.googleapis.com/css2?family=Allura&family=Great+Vibes&display=swap" rel="stylesheet"><<
 <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
 
 <script>
