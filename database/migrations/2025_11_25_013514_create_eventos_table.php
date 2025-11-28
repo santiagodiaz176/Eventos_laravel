@@ -6,34 +6,46 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
-    /**
-     * Run the migrations.
-     */
-    public function up()
-{
-Schema::create('eventos', function (Blueprint $table) {
-$table->id('id_evento');
-$table->string('nombre_evento', 100);
-$table->text('descripcion_evento')->nullable();
-$table->date('fecha_evento');
-$table->time('hora_evento');
-$table->string('lugar_evento', 200);
+    public function up(): void
+    {
+        Schema::create('eventos', function (Blueprint $table) {
 
+            $table->id('id_evento');
 
-    $table->unsignedBigInteger('id_cliente');
-    $table->unsignedBigInteger('id_tipoevento');
-    $table->unsignedBigInteger('id_metodo_pago');
-    $table->unsignedBigInteger('id_estado');
+            $table->string('nombre_evento', 100);
+            $table->text('descripcion_evento')->nullable();
+            $table->date('fecha_evento');
+            $table->time('hora_evento');
+            $table->string('lugar_evento', 200);
 
-    $table->foreign('id_cliente')->references('id_cliente')->on('cliente');
-    $table->foreign('id_tipoevento')->references('id_tipoevento')->on('tipoevento');
-    $table->foreign('id_metodo_pago')->references('id_metodo')->on('metododepago');
-    $table->foreign('id_estado')->references('id_estadoserva')->on('estadoreserva');
-});
-}
-public function down()
-{
-Schema::dropIfExists('eventos');
-}
+            // NUEVA COLUMNA: cantidad de personas
+            $table->smallInteger('cantidad_personas')->nullable()->default(0);
 
+            // FK USUARIO (QUIEN CREA EL EVENTO)
+            $table->unsignedBigInteger('id_usuario');
+
+            // OTRAS RELACIONES
+            $table->unsignedBigInteger('id_tipoevento');
+            $table->unsignedBigInteger('id_estado');
+
+            // FOREIGN KEYS
+            $table->foreign('id_usuario')
+                  ->references('id_usuario')
+                  ->on('usuarios')
+                  ->onDelete('cascade');
+
+            $table->foreign('id_tipoevento')
+                  ->references('id_tipoevento')
+                  ->on('tipoevento');
+
+            $table->foreign('id_estado')
+                  ->references('id_estadoserva')
+                  ->on('estadoreserva');
+        });
+    }
+
+    public function down(): void
+    {
+        Schema::dropIfExists('eventos');
+    }
 };

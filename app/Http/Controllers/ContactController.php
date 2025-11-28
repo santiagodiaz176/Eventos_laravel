@@ -9,7 +9,7 @@ class ContactController extends Controller
     // Mostrar el formulario de contacto
     public function index()
     {
-        return view('contacto'); // la vista Blade que creaste
+        return view('contacto'); 
     }
 
     // Manejar el envío del formulario

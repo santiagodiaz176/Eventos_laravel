@@ -9,17 +9,7 @@
 
 @section('content')
 
-@include('partials.navbar')
-
-<!-- Bienvenida al usuario logueado -->
-@auth
-<section class="section section-md bg-white text-center">
-    <div class="shell">
-        <h2>Bienvenido, {{ auth()->user()->name }}!</h2>
-        <p>Tu correo registrado: {{ auth()->user()->email }}</p>
-    </div>
-</section>
-@endauth
+@include('partials.navbar_user')
 
 <!-- Breadcrumbs -->
 <section class="breadcrumbs-custom bg-image" style="background-image: url('{{ asset('images/1111.jpg') }}');">
@@ -116,7 +106,9 @@
                     <p class="quote-boxed__title">¿Buscas el vestido perfecto?</p>
                     <div class="quote-boxed__text">
                         <p>
-                            Bienvenidos al mundo de la moda y las bodas, donde cada detalle cuenta para hacer de ese día el más especial y memorable.
+                            Bienvenidos al mundo de la moda y las bodas, donde cada detalle cuenta para hacer de ese día el más 
+                            especial y memorable. Si eres la novia y estás buscando el vestido perfecto para tu gran día, 
+                            hay algunos consejos que debes tener en cuenta para elegir el mejor.
                         </p>
                     </div>
                     <ul class="quote-boxed__meta">
@@ -131,41 +123,58 @@
 </section>
 
 <!-- Reserva -->
-<section class="section section-md bg-white">
-    <div class="shell">
-        <div class="range range-50 range-sm-center range-md-left range-md-reverse">
+<section class="section parallax-container bg-image-dark" data-parallax-img="{{ asset('images/boda1.jpg') }}">
+    <div class="parallax-content">
+        <section class="section-lg text-center">
+            <div class="shell">
+                <div class="range range-50 range-sm-center range-md-reverse range-md-middle">
 
-            <div class="cell-sm-10 cell-md-6">
-                <div class="box-width-4 box-centered">
-                    <p class="heading-1">Disfruta con nosotros,<br> reserva.</p>
-                    <p>Danos todos los detalles posibles para hacer tu sueño realidad.</p>
+                    <!-- Texto -->
+                    <div class="cell-md-6 cell-lg-5">
+                        <div class="box-width-4 box-centered">
+                            <p class="heading-1">Disfruta con nosotros,<br> reserva</p>
+                            <div class="divider-small"></div>
+                            <p>Danos todos los detalles posibles para hacer tu sueño realidad.</p>
+                        </div>
+                    </div>
+
+                    <!-- Formulario -->
+                    <div class="cell-sm-10 cell-md-6 cell-lg-7">
+                        <article class="box-bordered">
+                            <div class="box-bordered__main">
+                                <form class="rd-mailform" method="POST" action="{{ route('reserva.cita') }}">
+                                    @csrf
+                                    <div class="form-wrap">
+                                        <input class="form-input" id="contact-date" type="date" name="date" required>
+                                        <label class="form-label" for="contact-date">Fecha del evento</label>
+                                    </div>
+                                    <div class="form-wrap">
+                                        <input class="form-input" id="contact-name" type="text" name="name" required>
+                                        <label class="form-label" for="contact-name">Tu Nombre</label>
+                                    </div>
+                                    <div class="form-wrap">
+                                        <input class="form-input" id="contact-email" type="email" name="email" required>
+                                        <label class="form-label" for="contact-email">Correo electrónico</label>
+                                    </div>
+                                    <div class="form-wrap">
+                                        <label class="form-label" for="contact-message">
+                                            Cuéntanos, ¿qué tienes en mente para cumplir tus sueños?
+                                        </label>
+                                        <textarea class="form-input" id="contact-message" name="message" required></textarea>
+                                    </div>
+                                    <div class="form-wrap form-button offset-1">
+                                        <button class="button button-block button-primary-outline button-ujarak" type="submit">
+                                            Agendar una cita
+                                        </button>
+                                    </div>
+                                </form>
+                            </div>
+                        </article>
+                    </div>
+
                 </div>
             </div>
-
-            <div class="cell-sm-10 cell-md-6">
-                <article class="box-line">
-                    <div class="box-line__main">
-                        @auth
-                        <label class="form-label">HAZ TU RESERVA</label>
-                        <div class="form-wrap form-button offset-1">
-                            <a href="{{ route('reservas.create') }}" class="button button-block button-primary-outline button-ujarak">
-                                Reservar ahora
-                            </a>
-                        </div>
-                        @endauth
-                        @guest
-                        <label class="form-label">REGÍSTRATE CON NOSOTROS & HAZ TU RESERVA</label>
-                        <div class="form-wrap form-button offset-1">
-                            <a href="{{ route('register') }}" class="button button-block button-primary-outline button-ujarak">
-                                Regístrate
-                            </a>
-                        </div>
-                        @endguest
-                    </div>
-                </article>
-            </div>
-
-        </div>
+        </section>
     </div>
 </section>
 

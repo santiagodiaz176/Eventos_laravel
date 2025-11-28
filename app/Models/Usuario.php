@@ -24,7 +24,7 @@ class Usuario extends Authenticatable
         'clave',
     ];
 
-    // Laravel usa "password", tú usas "clave"
+    
     public function getAuthPassword()
     {
         return $this->clave;

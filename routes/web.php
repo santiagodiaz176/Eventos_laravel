@@ -1,11 +1,13 @@
 <?php
 
+use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\ContactController;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\Auth\LoginController;
-use App\Http\Controllers\ReservaController;
+use App\Http\Controllers\CitaController;
+use App\Http\Controllers\EventoController;
 
 /*
 | Rutas para Visitantes (sin iniciar sesión)
@@ -59,13 +61,17 @@ Route::middleware(['auth'])->group(function () {
 
     // Servicios del usuario
     Route::get('/usuario/servicios', function () {
-        return view('user/servicios.user');
+        return view('user/servicios_user');
     })->name('usuario.servicios');
 
     // Somos del usuario
     Route::get('/usuario/somos', function () {
         return view('user/somos_users');
     })->name('usuario.somos');
+
+    Route::get('/usuario/eventos', [EventoController::class, 'index'])
+    ->name('eventos.index')
+    ->middleware('auth');
 
     // Contacto del usuario
     Route::get('/usuario/contacto', [ContactController::class, 'index'])
@@ -74,8 +80,23 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/usuario/contacto', [ContactController::class, 'submit'])
         ->name('usuario.contact.submit');
 
-    Route::post('/usuario/reserva', [ReservaController::class, 'store'])
-        ->name('reserva.store');
+    // Mostrar todos los eventos del usuario
+    Route::get('/usuario/eventos', [EventoController::class, 'index'])
+        ->name('eventos.index');
+
+    // Formulario para crear un evento
+    Route::get('/usuario/eventos/create', [EventoController::class, 'create'])
+        ->name('eventos.create');
+
+    // Guardar el evento en la base de datos
+    Route::post('/usuario/eventos', [EventoController::class, 'store'])
+        ->name('eventos.store');
+
+    Route::get('/usuario/citas/create/{id_evento}', [CitaController::class, 'create'])
+        ->name('citas.create');
+
+    Route::post('/reservar-cita', [CitaController::class, 'store'])
+    ->name('reserva.cita');
 });
 
 
@@ -83,7 +104,8 @@ Route::middleware(['auth'])->group(function () {
 /*
 | Logout (solo redirección)
 */
-Route::get('/logout', function () {
+Route::post('/logout', function () {
+    Auth::logout();
     return redirect()->route('inicio');
 })->name('logout');
 
