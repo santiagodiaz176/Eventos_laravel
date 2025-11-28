@@ -135,7 +135,7 @@ marker.bindPopup(`
         <h2 style="
             font-family: 'Great Vibes';">Dream</h2>
         <button 
-            onclick="window.location.href='../vistas/index1.html'" 
+            onclick="window.location.href='{{ url('/register') }}'" 
             style="
             font-family: 'Josefin Sans', Helvetica, Arial, sans-serif;
                 padding:8px 12px;
