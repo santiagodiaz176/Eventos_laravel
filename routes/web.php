@@ -10,6 +10,7 @@ use App\Http\Controllers\CitaController;
 use App\Http\Controllers\EventoController;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\Admin\UsuarioController;
+use App\Http\Controllers\Admin\CitaAdminController;
 
 /*
 | Rutas para Visitantes (sin iniciar sesión)
@@ -99,6 +100,9 @@ Route::middleware(['auth'])->group(function () {
 
     Route::post('/reservar-cita', [CitaController::class, 'store'])
     ->name('reserva.cita');
+
+    Route::get('/usuario/citas/{id}/estado', [CitaController::class, 'estado'])
+    ->name('citas.estado');
 });
 
 
@@ -122,6 +126,30 @@ Route::middleware(['auth', 'admin'])->group(function () {
 
     Route::delete('/usuarios/{id}', [UsuarioController::class, 'destroy'])
     ->name('usuarios.destroy');
+
+
+    // Citas CRUD para el admin
+    Route::get('/admin/citas', [CitaAdminController::class, 'index'])
+        ->name('admin.citas.index'); // Lista todas las citas
+
+    Route::post('/admin/citas', [CitaAdminController::class, 'store'])
+        ->name('admin.citas.store'); // Guardar nueva cita
+
+    Route::get('/admin/citas/{id}/edit', [CitaAdminController::class, 'edit'])
+        ->name('admin.citas.edit'); // Editar / Posponer / Aceptar
+
+    Route::put('/admin/citas/{id}', [CitaAdminController::class, 'update'])
+        ->name('admin.citas.update'); // Guardar cambios (posponer o aceptar)
+
+    Route::delete('/admin/citas/{id}', [CitaAdminController::class, 'destroy'])
+        ->name('admin.citas.destroy'); // Cancelar cita
+
+    Route::get('/admin/eventos/{id_cita}/editar', [EventoController::class, 'editarPorAdmin'])
+         ->name('admin.eventos.editar');
+
+    // Actualizar estado del evento (aceptar / cancelar) por admin
+    Route::put('/admin/eventos/{id_evento}', [EventoController::class, 'updatePorAdmin'])
+         ->name('admin.eventos.update');
 });
 
 

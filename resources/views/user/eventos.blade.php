@@ -50,7 +50,7 @@
 
                                 {{-- ✅ TIPO DE EVENTO --}}
                                 <h4>
-                                    {{ $evento->tipo->descripcion_tipoevento ?? 'Evento' }}
+                                    {{ $evento->tipoevento->descripcion_tipoevento ?? 'Evento' }}
                                 </h4>
 
                                 {{-- ✅ FECHA --}}
@@ -69,15 +69,23 @@
                                 <p>
                                     <strong>Estado:</strong>
                                     <span class="text-primary">
-                                        {{ $evento->estado->nombre_estado ?? 'Pendiente' }}
+                                       {{ $evento->estado->nombre_estado ?? 'Pendiente' }}
                                     </span>
                                 </p>
 
-                                {{-- ✅ BOTÓN SOLICITAR CITA --}}
-                                <a href="{{ route('citas.create', ['id_evento' => $evento->id_evento]) }}"
-                                   class="button button-sm button-primary-outline button-ujarak">
-                                    Solicitar cita
-                                </a>
+                                {{-- BOTÓN SOLICITAR CITA --}}
+                                @if (!$evento->cita)
+                                    <a href="{{ route('citas.create', ['id_evento' => $evento->id_evento]) }}"
+                                      class="button button-sm button-primary-outline button-ujarak">
+                                      Solicitar cita
+                                    </a>
+                                @else
+                                    <a href="{{ route('citas.estado', $evento->cita->id_cita) }}"
+                                      class="button button-sm button-secondary-outline button-ujarak">
+                                      Ver estado de la cita
+                                    </a>
+                                @endif
+
 
                             </div>
                         </div>

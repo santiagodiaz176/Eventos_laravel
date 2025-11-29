@@ -40,10 +40,16 @@ class Evento extends Model
         return $this->hasMany(Cita::class, 'id_evento', 'id_evento');
     }
 
+    // Relación con una cita específica (si aplica)
+    public function cita()
+    {
+    return $this->hasOne(Cita::class, 'id_evento', 'id_evento');
+    }
+
     
      //Relación con el tipo de evento
 
-    public function tipo()
+    public function tipoevento()
     {
         return $this->belongsTo(TipoEvento::class, 'id_tipoevento', 'id_tipoevento');
     }
