@@ -16,16 +16,6 @@
     <link rel="stylesheet" href="{{ asset('css1/main.css') }}">
 @endsection
 
-@if ($errors->any())
-    <div class="alert alert-danger">
-        <ul style="margin:0">
-            @foreach ($errors->all() as $error)
-                <li>{{ $error }}</li>
-            @endforeach
-        </ul>
-    </div>
-@endif
-
 {{-- CONTENIDO --}}
     @section('content')
     <div class="limiter">
@@ -41,57 +31,90 @@
                     </span>
 
                 <table width="100%">
-                    <tr>
-                        <td>
-                            <div class="wrap-input100 m-b-23">
-                                <span class="label-input100">Nombre</span>
-                                <input class="input100" type="text" id="nombre" name="nombre" placeholder="Ingrese su nombre">
-                                <span class="focus-input100" data-symbol="&#xf206;"></span>
-                                <div class="error" id="errorNombre"></div>
-                            </div>
-                        </td>
+    <tr>
+        <td>
+            <div class="wrap-input100 m-b-23">
+                <span class="label-input100">Nombre</span>
+                <input class="input100" type="text" id="nombre" name="nombre"
+                       placeholder="Ingrese su nombre" value="{{ old('nombre') }}">
+                <span class="focus-input100" data-symbol="&#xf206;"></span>
 
-                        <td>
-                            <div class="wrap-input100 m-b-23">
-                                <span class="label-input100">Apellidos</span>
-                                <input class="input100" type="text" id="apellidos" name="apellidos" placeholder="Ingrese apellidos">
-                                <span class="focus-input100" data-symbol="&#xf206;"></span>
-                                <div class="error" id="errorApellidos"></div>
-                            </div>
-                        </td>
-                    </tr>
-                    
-                    <tr>
-                        <td colspan="2">
-                            <div class="wrap-input100 m-b-23">
-                                <span class="label-input100">Correo electrónico</span>
-                                <input class="input100" type="email" id="email" name="email" placeholder="ejemplo@correo.com">
-                                <span class="focus-input100" data-symbol="&#xf206;"></span>
-                                <div class="error" id="errorEmail"></div>
-                            </div>
-                        </td>
-                    </tr>
+                {{-- Error de JS --}}
+                <div class="error" id="errorNombre"></div>
 
-                    <tr>
-                        <td>
-                            <div class="wrap-input100 m-b-23">
-                                <span class="label-input100">Contraseña</span>
-                                <input class="input100" type="password" id="password" name="password" placeholder="Introduce tu contraseña">
-                                <span class="focus-input100" data-symbol="&#xf190;"></span>
-                                <div class="error" id="errorPassword"></div>
-                            </div>
-                        </td>
+                {{-- Error de Laravel --}}
+                @error('nombre')
+                    <div class="error" style="color:red; font-size: 14px;">{{ $message }}</div>
+                @enderror
+            </div>
+        </td>
 
-                        <td>
-                            <div class="wrap-input100 m-b-23">
-                                <span class="label-input100">Confirmar contraseña</span>
-                                <input class="input100" type="password" id="password_confirmation" name="password_confirmation" placeholder="Confirma tu contraseña">
-                                <span class="focus-input100" data-symbol="&#xf190;"></span>
-                                <div class="error" id="errorConfirmacion"></div>
-                            </div>
-                        </td>
-                    </tr>
-                </table>
+        <td>
+            <div class="wrap-input100 m-b-23">
+                <span class="label-input100">Apellidos</span>
+                <input class="input100" type="text" id="apellidos" name="apellidos"
+                    placeholder="Ingrese apellidos" value="{{ old('apellidos') }}">
+                <span class="focus-input100" data-symbol="&#xf206;"></span>
+
+                <div class="error" id="errorApellidos"></div>
+
+                @error('apellidos')
+                    <div class="error" style="color:red; font-size: 14px;">{{ $message }}</div>
+                @enderror
+            </div>
+        </td>
+    </tr>
+    
+    <tr>
+        <td colspan="2">
+            <div class="wrap-input100 m-b-23">
+                <span class="label-input100">Correo electrónico</span>
+                <input class="input100" type="email" id="email" name="email"
+                    placeholder="ejemplo@correo.com" value="{{ old('email') }}">
+                <span class="focus-input100" data-symbol="&#xf206;"></span>
+
+                <div class="error" id="errorEmail"></div>
+
+                @error('email')
+                    <div class="error" style="color:red; font-size: 14px;">{{ $message }}</div>
+                @enderror
+            </div>
+        </td>
+    </tr>
+
+    <tr>
+        <td>
+            <div class="wrap-input100 m-b-23">
+                <span class="label-input100">Contraseña</span>
+                <input class="input100" type="password" id="password" name="password"
+                    placeholder="Introduce tu contraseña">
+                <span class="focus-input100" data-symbol="&#xf190;"></span>
+
+                <div class="error" id="errorPassword"></div>
+
+                @error('password')
+                    <div class="error" style="color:red; font-size: 14px;">{{ $message }}</div>
+                @enderror
+            </div>
+        </td>
+
+        <td>
+            <div class="wrap-input100 m-b-23">
+                <span class="label-input100">Confirmar contraseña</span>
+                <input class="input100" type="password" id="password_confirmation" 
+                       name="password_confirmation" placeholder="Confirma tu contraseña">
+                <span class="focus-input100" data-symbol="&#xf190;"></span>
+
+                <div class="error" id="errorConfirmacion"></div>
+
+                @error('password_confirmation')
+                    <div class="error" style="color:red; font-size: 14px;">{{ $message }}</div>
+                @enderror
+            </div>
+        </td>
+    </tr>
+</table>
+
 
                 <div class="container-login100-form-btn p-t-20">
                     <div class="wrap-login100-form-btn">

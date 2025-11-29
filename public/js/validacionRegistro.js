@@ -4,85 +4,92 @@
     const fields = {
       nombre: { el: document.getElementById('nombre'), err: document.getElementById('errorNombre') },
       apellidos: { el: document.getElementById('apellidos'), err: document.getElementById('errorApellidos') },
-      usuario: { el: document.getElementById('usuario'), err: document.getElementById('errorUsuario') },
-      clave: { el: document.getElementById('clave'), err: document.getElementById('errorClave') },
-      confirmar: { el: document.getElementById('confirmar'), err: document.getElementById('errorConfirmar') }
+      email: { el: document.getElementById('email'), err: document.getElementById('errorEmail') },
+      password: { el: document.getElementById('password'), err: document.getElementById('errorPassword') },
+      password_confirmation: { el: document.getElementById('password_confirmation'), err: document.getElementById('errorConfirmacion') }
     };
 
     function limpiarErrores() {
         Object.values(fields).forEach(f => {
             f.err.textContent = '';
             f.err.style.display = "none";
-            f.err.style.color = "red";      // 🔴 color rojo
-            f.err.style.fontSize = "14px";  // tamaño texto
+            f.err.style.color = "red";
+            f.err.style.fontSize = "14px";
         });
     }
 
     function validarCampos() {
       let valido = true;
-
       limpiarErrores();
 
       const nombre = fields.nombre.el.value.trim();
       const apellidos = fields.apellidos.el.value.trim();
-      const usuario = fields.usuario.el.value.trim();
-      const clave = fields.clave.el.value;
-      const confirmar = fields.confirmar.el.value;
+      const email = fields.email.el.value.trim();
+      const password = fields.password.el.value;
+      const confirmar = fields.password_confirmation.el.value;
 
+      // NOMBRE
       if (!nombre) {
         fields.nombre.err.textContent = 'El nombre es obligatorio.';
         fields.nombre.err.style.display = "block";
         valido = false;
       }
 
+      // APELLIDOS
       if (!apellidos) {
         fields.apellidos.err.textContent = 'Los apellidos son obligatorios.';
         fields.apellidos.err.style.display = "block";
         valido = false;
       }
 
-      if (!usuario) {
-        fields.usuario.err.textContent = 'El correo es obligatorio.';
-        fields.usuario.err.style.display = "block";
-        valido = false;
-      } else {
-        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-        if (!emailRegex.test(usuario)) {
-          fields.usuario.err.textContent = 'Introduce un correo válido.';
-          fields.usuario.err.style.display = "block";
-          valido = false;
-        }
-        if (/\s/.test(usuario)) {
-          fields.usuario.err.textContent = 'El correo no puede contener espacios.';
-          fields.usuario.err.style.display = "block";
-          valido = false;
-        }
-      }
+      // EMAIL
+      const emailRegex = /^[A-Za-z0-9._%+-]+@(gmail|hotmail)\.com$/;
 
-      if (!clave) {
-        fields.clave.err.textContent = 'La contraseña es obligatoria.';
-        fields.clave.err.style.display = "block";
+      if (!email) {
+        fields.email.err.textContent = 'El correo es obligatorio.';
+        fields.email.err.style.display = "block";
         valido = false;
-      } else if (clave.length < 8) {
-        fields.clave.err.textContent = 'La contraseña debe tener mínimo 8 caracteres.';
-        fields.clave.err.style.display = "block";
+      } else if (!emailRegex.test(email)) {
+        fields.email.err.textContent = 'Solo se permiten correos @gmail.com o @hotmail.com.';
+        fields.email.err.style.display = "block";
         valido = false;
       }
 
+      // CONTRASEÑA
+      const passRegexMayus = /[A-Z]/;
+      const passRegexMinus = /[a-z]/;
+      const passRegexNum = /[0-9]/;
+
+      if (!password) {
+        fields.password.err.textContent = 'La contraseña es obligatoria.';
+        fields.password.err.style.display = "block";
+        valido = false;
+      } else if (password.length < 8) {
+        fields.password.err.textContent = 'La contraseña debe tener mínimo 8 caracteres.';
+        fields.password.err.style.display = "block";
+        valido = false;
+      } else if (!passRegexMayus.test(password) ||
+                 !passRegexMinus.test(password) ||
+                 !passRegexNum.test(password)) {
+        fields.password.err.textContent = 'La contraseña debe incluir mayúscula, minúscula y número.';
+        fields.password.err.style.display = "block";
+        valido = false;
+      }
+
+      // CONFIRMACION
       if (!confirmar) {
-        fields.confirmar.err.textContent = 'Confirma la contraseña.';
-        fields.confirmar.err.style.display = "block";
+        fields.password_confirmation.err.textContent = 'Confirma la contraseña.';
+        fields.password_confirmation.err.style.display = "block";
         valido = false;
-      } else if (confirmar !== clave) {
-        fields.confirmar.err.textContent = 'Las contraseñas no coinciden.';
-        fields.confirmar.err.style.display = "block";
+      } else if (confirmar !== password) {
+        fields.password_confirmation.err.textContent = 'Las contraseñas no coinciden.';
+        fields.password_confirmation.err.style.display = "block";
         valido = false;
       }
 
       return valido;
     }
 
-    // SOLO valida al enviar
     form.addEventListener('submit', function(e){
       if (!validarCampos()) {
         e.preventDefault();
