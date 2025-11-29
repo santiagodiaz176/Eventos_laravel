@@ -3,12 +3,16 @@
 namespace App\Models;
 
 use Illuminate\Foundation\Auth\User as Authenticatable;
+use Illuminate\Notifications\Notifiable;
+use App\Notifications\ResetPasswordNotification;
 
 class Usuario extends Authenticatable
 {
+    use Notifiable;  // ← IMPORTANTE: Agregar este trait
+
     protected $table = 'usuarios';
     protected $primaryKey = 'id_usuario';
-    public $timestamps = true; // asegúrate que las columnas created_at y updated_at existen
+    public $timestamps = true;
 
     protected $fillable = [
         'usuario',
@@ -22,7 +26,7 @@ class Usuario extends Authenticatable
 
     protected $hidden = [
         'clave',
-        'remember_token', // si usas remember me
+        'remember_token',
     ];
 
     /**
@@ -31,6 +35,22 @@ class Usuario extends Authenticatable
     public function getAuthPassword()
     {
         return $this->clave;
+    }
+
+    /**
+     * Enviar notificación de reseteo de contraseña
+     */
+    public function sendPasswordResetNotification($token)
+    {
+        $this->notify(new ResetPasswordNotification($token));
+    }
+
+    /**
+     * Laravel usará 'email' para buscar el usuario en password reset
+     */
+    public function getEmailForPasswordReset()
+    {
+        return $this->email;
     }
 
     /**

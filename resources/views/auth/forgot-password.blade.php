@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'Iniciar Sesión')
+@section('title', 'Recuperar Contraseña')
 
 {{-- ESTILOS --}}
 @section('styles')
@@ -22,52 +22,51 @@
     <div class="container-login100" style="background-image:url('{{ asset('images1/01.jpg') }}');">
 
         <div class="wrap-login100 p-l-55 p-r-55 p-t-65 p-b-54">
-            <form class="login100-form validate-form" method="POST" 
-             action="{{ route('login.store') }}" id="loginForm">
+            <form class="login100-form validate-form" method="POST" action="{{ route('password.email') }}" id="forgotPasswordForm">
                 @csrf
 
                 <span class="login100-form-title p-b-49">
-                    Iniciar Sesión
+                    Recuperar Contraseña
                 </span>
+
+                <div class="txt1 text-center p-b-20">
+                    <p>Ingresa tu correo electrónico y te enviaremos un código para restablecer tu contraseña.</p>
+                </div>
+
+                {{-- Mensaje de éxito --}}
+                @if (session('status'))
+                    <div class="alert alert-success m-b-20" role="alert">
+                        {{ session('status') }}
+                    </div>
+                @endif
+
+                {{-- Mensajes de error --}}
+                @if ($errors->any())
+                    <div class="alert alert-danger m-b-20" role="alert">
+                        {{ $errors->first('email') }}
+                    </div>
+                @endif
 
                 <div class="wrap-input100 validate-input m-b-23" data-validate="Correo requerido">
                     <span class="label-input100">Correo Electrónico</span>
-                    <input class="input100" type="email" name="email" id="email" placeholder="correo@ejemplo.com">
+                    <input class="input100" type="email" name="email" id="email" 
+                           placeholder="correo@ejemplo.com" value="{{ old('email') }}" required>
                     <span class="focus-input100" data-symbol="&#xf206;"></span>
                     <div class="error" id="errorEmail"></div>
                 </div>
-
-                <div class="wrap-input100 validate-input" data-validate="Contraseña requerida">
-                    <span class="label-input100">Contraseña</span>
-                    <input class="input100" type="password" name="clave" id="password" placeholder="Introduce tu contraseña">
-                    <span class="focus-input100" data-symbol="&#xf190;"></span>
-                    <div class="error" id="errorPassword"></div>
-                </div>
-
-                <div class="text-right p-t-8 p-b-31">
-    <a href="{{ route('password.request') }}">¿Olvidaste tu contraseña?</a>
-</div>
 
                 <div class="container-login100-form-btn">
                     <div class="wrap-login100-form-btn">
                         <div class="login100-form-bgbtn"></div>
                         <button class="login100-form-btn" type="submit">
-                            Ingresar
+                            Enviar Código
                         </button>
                     </div>
                 </div>
 
                 <div class="flex-col-c p-t-50">
-                    <span class="txt1 p-b-17">
-                        ¿No tienes cuenta?
-                    </span>
-
-                    <a href="{{ route('register') }}" class="txt2">
-                        Crear cuenta
-                    </a>
-
-                    <a href="{{ url('/') }}" class="txt2">
-                        Volver al inicio
+                    <a href="{{ route('login') }}" class="txt2">
+                        Volver al inicio de sesión
                     </a>
                 </div>
 
@@ -85,9 +84,4 @@
     <script src="{{ asset('vendor/bootstrap/js/popper.js') }}"></script>
     <script src="{{ asset('vendor/bootstrap/js/bootstrap.min.js') }}"></script>
     <script src="{{ asset('vendor/select2/select2.min.js') }}"></script>
-    <script src="{{ asset('vendor/daterangepicker/moment.min.js') }}"></script>
-    <script src="{{ asset('vendor/daterangepicker/daterangepicker.js') }}"></script>
-
-    {{-- VALIDACIÓN LOGIN --}}
-    <script src="{{ asset('js/validacionLogin.js') }}"></script>
 @endsection

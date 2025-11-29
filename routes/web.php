@@ -6,18 +6,15 @@ use Illuminate\Support\Facades\Route;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\Auth\LoginController;
+use App\Http\Controllers\Auth\PasswordResetController;
 use App\Http\Controllers\CitaController;
 use App\Http\Controllers\EventoController;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\Admin\UsuarioController;
 
 /*
-| Rutas para Visitantes (sin iniciar sesión)
+| Rutas específicas PRIMERO
 */
-
-Route::get('/', function () {
-    return view('index');
-})->name('inicio');
 
 Route::get('/about', function () {
     return view('about');
@@ -49,6 +46,22 @@ Route::get('/login', function () {
 
 Route::post('/login', [LoginController::class, 'login'])
     ->name('login.store');
+
+// ========================================
+// 🔑 RUTAS DE RECUPERACIÓN DE CONTRASEÑA
+// ========================================
+Route::get('forgot-password', [PasswordResetController::class, 'showLinkRequestForm'])
+    ->name('password.request');
+
+Route::post('forgot-password', [PasswordResetController::class, 'sendResetLinkEmail'])
+    ->name('password.email');
+
+Route::get('reset-password/{token}', [PasswordResetController::class, 'showResetForm'])
+    ->name('password.reset');
+
+Route::post('reset-password', [PasswordResetController::class, 'reset'])
+    ->name('password.update');
+// ========================================
 
 /*
 | Rutas del Usuario Registrado (requiere login)
@@ -147,3 +160,10 @@ Route::post('/newsletter/subscribe', function (Request $request) {
     return back()->with('success', '¡Gracias por suscribirte a nuestro boletín!');
     
 })->name('newsletter.subscribe');
+
+/*
+| ⚠️ RUTA RAÍZ - SIEMPRE AL FINAL
+*/
+Route::get('/', function () {
+    return view('index');
+})->name('inicio');
