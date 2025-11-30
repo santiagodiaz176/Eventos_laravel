@@ -1,17 +1,17 @@
-(function(){
-    const form = document.getElementById('formLogin');
+(function () {
+    const form = document.getElementById('loginForm');
 
     const fields = {
-      email: { el: document.getElementById('loginEmail'), err: document.getElementById('errorLoginEmail') },
-      password: { el: document.getElementById('loginPassword'), err: document.getElementById('errorLoginPassword') }
+        email: { el: document.getElementById('email'), err: document.getElementById('errorEmail') },
+        password: { el: document.getElementById('password'), err: document.getElementById('errorPassword') }
     };
 
     function limpiarErrores() {
         Object.values(fields).forEach(f => {
             f.err.textContent = '';
             f.err.style.display = "none";
-            f.err.style.color = "red";      // 🔴 color rojo
-            f.err.style.fontSize = "14px";  // tamaño texto
+            f.err.style.color = "red";
+            f.err.style.fontSize = "14px";
         });
     }
 
@@ -22,6 +22,7 @@
         const email = fields.email.el.value.trim();
         const password = fields.password.el.value;
 
+        // Validar email
         if (!email) {
             fields.email.err.textContent = 'El correo es obligatorio.';
             fields.email.err.style.display = 'block';
@@ -35,6 +36,7 @@
             }
         }
 
+        // Validar password
         if (!password) {
             fields.password.err.textContent = 'La contraseña es obligatoria.';
             fields.password.err.style.display = 'block';
@@ -44,7 +46,7 @@
         return valido;
     }
 
-    form.addEventListener('submit', function(e){
+    form.addEventListener('submit', function (e) {
         if (!validarCampos()) {
             e.preventDefault();
         }
