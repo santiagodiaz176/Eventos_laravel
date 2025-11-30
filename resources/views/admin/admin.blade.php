@@ -205,7 +205,22 @@
 
 
 {{-- SUSCRIPCIONES --}}
+{{-- SUSCRIPCIONES --}}
 <div id="suscripciones" class="content">
+
+    @if(session('success'))
+        <div class="alert-success">
+            {{ session('success') }}
+        </div>
+    @endif
+
+    {{-- ✅ Botón agregar --}}
+    <a href="{{ route('admin.suscripciones.create') }}"
+       class="btn"
+       style="margin-bottom:10px;">
+        <i class="fas fa-plus"></i> Agregar Suscripción
+    </a>
+
     <table>
         <thead>
         <tr>
@@ -213,18 +228,61 @@
             <th>Correo</th>
             <th>Registro</th>
             <th>Estado</th>
+            <th>Acciones</th>
         </tr>
         </thead>
 
         <tbody>
-        @foreach($suscripciones as $s)
+        @forelse($suscripciones as $s)
             <tr>
                 <td>{{ $s->id_suscripcion }}</td>
                 <td>{{ $s->correo }}</td>
                 <td>{{ $s->fecha_registro }}</td>
-                <td>{{ $s->estado }}</td>
+
+                <td>
+                    <span class="{{ $s->estado === 'activo' ? 'badge badge-success' : 'badge badge-danger' }}">
+                        {{ ucfirst($s->estado) }}
+                    </span>
+                </td>
+
+                <td>
+                    {{-- ✅ Editar --}}
+                    <a href="{{ route('admin.suscripciones.editar', $s->id_suscripcion) }}"
+                       class="btn btn-warning btn-sm">
+                        <i class="fas fa-edit"></i>
+                    </a>
+
+                    {{-- ✅ Activar / Desactivar --}}
+                    <form action="{{ route('admin.suscripciones.toggle', $s->id_suscripcion) }}"
+                          method="POST"
+                          style="display:inline;">
+                        @csrf
+                        @method('PUT')
+                        <button class="btn btn-secondary btn-sm">
+                            {{ $s->estado === 'activo' ? 'Desactivar' : 'Activar' }}
+                        </button>
+                    </form>
+
+                    {{-- ✅ Eliminar --}}
+                    <form action="{{ route('admin.suscripciones.destroy', $s->id_suscripcion) }}"
+                          method="POST"
+                          style="display:inline;"
+                          onsubmit="return confirm('¿Eliminar esta suscripción?')">
+                        @csrf
+                        @method('DELETE')
+                        <button class="btn btn-danger btn-sm">
+                            <i class="fas fa-trash"></i>
+                        </button>
+                    </form>
+                </td>
             </tr>
-        @endforeach
+        @empty
+            <tr>
+                <td colspan="5" class="sin-registros">
+                    No hay suscripciones registradas
+                </td>
+            </tr>
+        @endforelse
         </tbody>
     </table>
 </div>

@@ -10,30 +10,47 @@ return new class extends Migration
      * Run the migrations.
      */
     public function up()
-{
-Schema::create('suscripciones', function (Blueprint $table) {
-$table->id('id_suscripcion');
-$table->unsignedBigInteger('id_usuario');
-$table->string('correo', 100);
-$table->enum('tipo', ['un mes', 'un trimestre', 'un semestre', 'un año']);
-$table->date('fecha_inicio');
-$table->date('fecha_fin')->nullable();
-$table->enum('estado', ['activo', 'inactivo'])->default('activo');
-$table->timestamp('fecha_registro')->useCurrent();
+    {
+        Schema::create('suscripciones', function (Blueprint $table) {
 
+            $table->id('id_suscripcion');
 
-    $table->foreign('id_usuario')
-          ->references('id_usuario')->on('usuarios')
-          ->onDelete('cascade')
-          ->onUpdate('cascade');
-});
+            // Puede ser NULL para visitantes
+            $table->unsignedBigInteger('id_usuario')->nullable();
 
+            // Correo del suscriptor (visitor o usuario)
+            $table->string('correo', 100)->unique();
 
-}
+            // Para futuras suscripciones de pago (no obligatorio ahora)
+            $table->enum('tipo', [
+                'un mes',
+                'un trimestre',
+                'un semestre',
+                'un año'
+            ])->nullable();
 
-public function down()
-{
-Schema::dropIfExists('suscripciones');
-}
+            $table->date('fecha_inicio')->nullable();
+            $table->date('fecha_fin')->nullable();
 
+            $table->enum('estado', ['activo', 'inactivo'])
+                  ->default('activo');
+
+            $table->timestamp('fecha_registro')->useCurrent();
+
+            // Relación con usuarios
+            $table->foreign('id_usuario')
+                  ->references('id_usuario')
+                  ->on('usuarios')
+                  ->onDelete('cascade')
+                  ->onUpdate('cascade');
+        });
+    }
+
+    /**
+     * Reverse the migrations.
+     */
+    public function down()
+    {
+        Schema::dropIfExists('suscripciones');
+    }
 };
