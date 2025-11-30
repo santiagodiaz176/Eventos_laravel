@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\Cita;
 use Illuminate\Http\Request;
+use Carbon\Carbon;
 
 class CitaAdminController extends Controller
 {
@@ -13,9 +14,7 @@ class CitaAdminController extends Controller
      */
     public function index()
     {
-        // Cargar relaciones para evitar consultas adicionales
         $citas = Cita::with(['estado', 'usuario', 'evento'])->get();
-
         return view('admin.citas.index', compact('citas'));
     }
 
@@ -24,8 +23,7 @@ class CitaAdminController extends Controller
      */
     public function edit($id)
     {
-        $cita = Cita::findOrFail($id);
-
+        $cita = Cita::with('evento')->findOrFail($id);
         return view('admin.citas.posponer', compact('cita'));
     }
 
@@ -34,7 +32,7 @@ class CitaAdminController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $cita = Cita::findOrFail($id);
+        $cita = Cita::with('evento')->findOrFail($id);
 
         $request->validate([
             'accion' => 'required|in:aceptar,posponer,cancelar'
@@ -47,57 +45,50 @@ class CitaAdminController extends Controller
                 break;
 
             case 'posponer':
+
                 $request->validate([
                     'fecha_cita' => 'required|date|after_or_equal:today',
                     'hora_cita'  => 'required'
                 ]);
 
-                $cita->fecha_cita    = $request->fecha_cita;
-                $cita->hora_cita     = $request->hora_cita;
+                // 🔒 VALIDACIÓN CLAVE
+                $fechaEvento = Carbon::parse($cita->evento->fecha_evento)->startOfDay();
+                $fechaCita   = Carbon::parse($request->fecha_cita)->startOfDay();
+
+                if ($fechaCita->greaterThanOrEqualTo($fechaEvento)) {
+                    return back()->withErrors([
+                        'fecha_cita' => 'La cita debe programarse antes del día del evento.'
+                    ])->withInput();
+                }
+
+                $cita->fecha_cita     = $request->fecha_cita;
+                $cita->hora_cita      = $request->hora_cita;
                 $cita->id_estadoserva = 4; // ✅ Pospuesta
                 break;
 
             case 'cancelar':
-                $cita->id_estadoserva = 3; // ✅ Cancelada/Rechazada
+                $cita->id_estadoserva = 3; // ✅ Cancelada
                 break;
         }
 
         $cita->save();
 
-        // Redirigir a la vista de panel de administración con citas
         return redirect()
-            ->route('admin.citas.index')
+            ->route('admin.index', ['tab' => 'citas'])
             ->with('success', 'Estado de la cita actualizado correctamente');
     }
 
     /**
-     * Cancelar cita (solo se marca como cancelada)
+     * Cancelar cita
      */
     public function destroy($id)
     {
         $cita = Cita::findOrFail($id);
-        $cita->id_estadoserva = 3; // Cancelada
+        $cita->id_estadoserva = 3;
         $cita->save();
 
         return redirect()
-            ->route('admin.citas.index')
+            ->route('admin.index', ['tab' => 'citas'])
             ->with('success', 'Cita cancelada correctamente');
-    }
-
-    /**
-     * Crear evento a partir de una cita aprobada
-     */
-    public function crearEvento($id_cita)
-    {
-        $cita = Cita::findOrFail($id_cita);
-
-        if ($cita->id_estadoserva !== 2) {
-            // Si la cita no está aprobada, redirigir a panel de citas
-            return redirect()
-               ->route('admin.citas.index')
-               ->with('success', 'Estado de la cita actualizado correctamente');
-        }
-
-        return view('admin.eventos.create', compact('cita'));
     }
 }

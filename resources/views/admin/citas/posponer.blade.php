@@ -75,9 +75,9 @@
         <input type="hidden" name="accion" value="posponer">
 
         <label>Fecha de la Cita</label>
-        <input type="date" name="fecha_cita"
-               class="form-control"
-               value="{{ $cita->fecha_cita }}" required>
+        <input type="date" name="fecha_cita" class="form-control" value="{{ $cita->fecha_cita }}"
+        min="{{ now()->toDateString() }}" max="{{ \Carbon\Carbon::parse($cita->evento->fecha_evento)->subDay()->toDateString() }}"
+        required>
 
         <label>Hora de la Cita</label>
         <input type="time" name="hora_cita"

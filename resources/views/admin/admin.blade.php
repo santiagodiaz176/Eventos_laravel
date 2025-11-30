@@ -100,6 +100,7 @@
 
 {{-- CITAS --}}
 <div id="citas" class="content">
+
     @if(session('success'))
         <div class="alert-success">
             {{ session('success') }}
@@ -119,73 +120,89 @@
         </thead>
 
         <tbody>
-            @forelse($citas as $c)
+        @forelse($citas as $c)
+            @php
+                $estadoCita = $c->estado->nombre_estado ?? 'Pendiente';
+                $evento = $c->evento ?? null;
+            @endphp
+
             <tr>
                 <td>{{ $c->id_cita }}</td>
                 <td>{{ $c->usuario->nombre ?? $c->nombre }}</td>
                 <td>{{ $c->telefono }}</td>
                 <td>{{ $c->fecha_cita }}</td>
-                <td>{{ $c->estado->nombre_estado ?? 'Pendiente' }}</td>
+                <td>{{ $estadoCita }}</td>
+
                 <td class="acciones">
-                    @php
-                        $estado = $c->estado->nombre_estado ?? 'Pendiente';
-                    @endphp
 
-                    {{-- Pendiente --}}
-                    @if($estado === 'Pendiente')
-                        <form action="{{ route('admin.citas.update', $c->id_cita) }}" method="POST" style="display:inline-block;">
+                    {{-- ✅ PENDIENTE / POSPUESTA --}}
+                    @if(in_array($estadoCita, ['Pendiente', 'Pospuesta']))
+
+                        <form action="{{ route('admin.citas.update', $c->id_cita) }}"
+                              method="POST" style="display:inline;">
                             @csrf
                             @method('PUT')
                             <input type="hidden" name="accion" value="aceptar">
-                            <button type="submit" class="btn btn-success">Aceptar</button>
+                            <button class="btn btn-success btn-sm">Aceptar</button>
                         </form>
 
-                        <form action="{{ route('admin.citas.update', $c->id_cita) }}" method="POST" style="display:inline-block;">
+                        <form action="{{ route('admin.citas.update', $c->id_cita) }}"
+                              method="POST" style="display:inline;">
                             @csrf
                             @method('PUT')
                             <input type="hidden" name="accion" value="cancelar">
-                            <button type="submit" class="btn btn-danger">Cancelar</button>
+                            <button class="btn btn-danger btn-sm">Cancelar</button>
                         </form>
 
-                        <a href="{{ route('admin.citas.edit', $c->id_cita) }}" class="btn btn-warning">Posponer</a>
+                        @if($estadoCita === 'Pendiente')
+                            <a href="{{ route('admin.citas.edit', $c->id_cita) }}"
+                               class="btn btn-warning btn-sm">
+                                Posponer
+                            </a>
+                        @endif
 
-                    {{-- Pospuesta --}}
-                    @elseif($estado === 'Pospuesta')
-                        <form action="{{ route('admin.citas.update', $c->id_cita) }}" method="POST" style="display:inline-block;">
-                            @csrf
-                            @method('PUT')
-                            <input type="hidden" name="accion" value="aceptar">
-                            <button type="submit" class="btn btn-success">Aceptar</button>
-                        </form>
+                    {{-- ✅ CITA APROBADA + EVENTO --}}
+                    @elseif($estadoCita === 'Aprobada' && $evento)
 
-                        <form action="{{ route('admin.citas.update', $c->id_cita) }}" method="POST" style="display:inline-block;">
-                            @csrf
-                            @method('PUT')
-                            <input type="hidden" name="accion" value="cancelar">
-                            <button type="submit" class="btn btn-danger">Cancelar</button>
-                        </form>
+                        @if($evento->id_estado == 1)
+                            <a href="{{ route('admin.eventos.editar', $evento->id_evento) }}"
+                               class="btn btn-primary btn-sm">
+                                Ver evento
+                            </a>
 
-                    {{-- Aprobada --}}
-                    @elseif($estado === 'Aprobada')
-                        <a href="{{ route('admin.eventos.editar', $c->id_cita) }}" class="btn btn-primary">Ver Evento</a>
+                        @elseif($evento->id_estado == 2)
+                            <span class="badge badge-success">
+                                Se aceptó el evento
+                            </span>
 
-                    {{-- Cancelada / Rechazada --}}
-                    @else
-                        <strong>{{ $estado }}</strong>
+                        @elseif($evento->id_estado == 3)
+                            <span class="badge badge-danger">
+                                Se canceló el evento
+                            </span>
+                        @endif
+
+                    {{-- CITA CANCELADA --}}
+                    @elseif($estadoCita === 'Cancelada')
+                        <span class="badge badge-danger">
+                            Se canceló la cita
+                        </span>
+
                     @endif
+
                 </td>
             </tr>
 
-            @empty
+        @empty
             <tr>
                 <td colspan="6" class="sin-registros">
                     No hay citas registradas
                 </td>
             </tr>
-            @endforelse
+        @endforelse
         </tbody>
     </table>
 </div>
+
 
 {{-- SUSCRIPCIONES --}}
 <div id="suscripciones" class="content">

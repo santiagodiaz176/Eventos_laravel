@@ -52,6 +52,17 @@ class CitaController extends Controller
                 ->with('warning', 'Este evento ya tiene una cita registrada.');
         }
 
+        // 🔒 VALIDACIÓN CLAVE (NUEVA)
+        $fechaEvento = Carbon::parse($evento->fecha_evento)->startOfDay();
+        $fechaCita   = Carbon::parse($request->fecha_cita)->startOfDay();
+
+        // Bloquear día del evento y cualquier día posterior
+        if ($fechaCita->greaterThanOrEqualTo($fechaEvento)) {
+            return back()->withErrors([
+                'fecha_cita' => 'No se puede solicitar una cita el día del evento ni en fechas posteriores.'
+            ])->withInput();
+        }
+
         // CREAR CITA
         Cita::create([
             'nombre'          => $request->nombre,

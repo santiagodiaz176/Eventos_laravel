@@ -87,7 +87,8 @@
             </div>
             <div class="col-md-6">
                 <label>Fecha de la cita:</label>
-                <input type="date" name="fecha_cita" class="form-control" required>
+                <input type="date" name="fecha_cita" class="form-control" min="{{ now()->toDateString() }}" 
+                max="{{ \Carbon\Carbon::parse($evento->fecha_evento)->subDay()->toDateString() }}" required>
             </div>
         </div>
 

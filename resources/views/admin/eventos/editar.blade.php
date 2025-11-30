@@ -74,7 +74,10 @@
         <div class="row">
             <div class="col-md-6">
                 <label>Fecha:</label>
-                <input type="date" name="fecha_evento" class="form-control" value="{{ $evento->fecha_evento }}" required>
+                <input type="date" name="fecha_evento" class="form-control"
+                       value="{{ $evento->fecha_evento }}"
+                       min="{{ \Carbon\Carbon::tomorrow()->format('Y-m-d') }}" 
+                       required>
             </div>
 
             <div class="col-md-6">
