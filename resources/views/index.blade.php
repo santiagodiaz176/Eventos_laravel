@@ -77,8 +77,7 @@
                     Tu navegador no soporta el elemento de video.
                   </video>
                 </div>
-              </div>
-              <div class="cell-sm-6">
+                <div class="cell-sm-6">
                 <div class="box-width-3">
                   <p class="heading-1 wow fadeInLeftSmall">Acerca de nosotros</p>
                   <article class="quote-big wow fadeInLeftSmall" data-wow-delay=".1s">
@@ -87,6 +86,7 @@
                   <div class="divider wow fadeInLeftSmall" data-wow-delay=".2s"></div>
                   <p class="wow fadeInLeftSmall" data-wow-delay=".3s">...</p><a class="button button-primary-outline button-ujarak button-size-1 wow fadeInLeftSmall" href="{{ route('about') }}" data-wow-delay=".4s">Leer más</a>
                 </div>
+              </div>
               </div>
             </div>
           </div>
