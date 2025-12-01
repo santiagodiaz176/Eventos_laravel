@@ -10,7 +10,7 @@ use Illuminate\Support\Facades\Cookie;
 class SuscripcionController extends Controller
 {
     /**
-     * ✅ Guardar suscripción desde el footer
+     * Guardar suscripción desde el footer
      */
     public function store(Request $request)
     {
@@ -24,7 +24,7 @@ class SuscripcionController extends Controller
             'estado' => 'activo'
         ]);
 
-        // ✅ Cookie por 1 año
+        // Cookie por 1 año
         Cookie::queue('suscrito_email', $request->email, 525600);
 
         return redirect()
@@ -33,7 +33,7 @@ class SuscripcionController extends Controller
     }
 
     /**
-     * ✅ Listar suscripciones (admin)
+     * Listar suscripciones (admin)
      */
     public function index()
     {
@@ -42,7 +42,7 @@ class SuscripcionController extends Controller
     }
 
     /**
-     * ✅ Mostrar formulario para crear suscripción (admin)
+     * Mostrar formulario para crear suscripción (admin)
      */
     public function createAdmin()
     {
@@ -50,7 +50,7 @@ class SuscripcionController extends Controller
     }
 
     /**
-     * ✅ Mostrar formulario para editar suscripción (admin)
+     * Mostrar formulario para editar suscripción (admin)
      */
     public function editAdmin($id)
     {
@@ -59,7 +59,7 @@ class SuscripcionController extends Controller
     }
 
     /**
-     * ✅ Guardar suscripción desde el admin
+     * Guardar suscripción desde el admin
      */
     public function storeAdmin(Request $request)
     {
@@ -79,7 +79,7 @@ class SuscripcionController extends Controller
     }
 
     /**
-     * ✅ Actualizar suscripción (admin)
+     * Actualizar suscripción (admin)
      */
     public function update(Request $request, $id)
     {
@@ -102,7 +102,7 @@ class SuscripcionController extends Controller
     }
 
     /**
-     * ✅ Eliminar suscripción (admin)
+     * Eliminar suscripción (admin)
      */
     public function destroy($id)
     {
@@ -114,7 +114,7 @@ class SuscripcionController extends Controller
     }
 
     /**
-     * ✅ Activar / Desactivar suscripción (admin)
+     * Activar / Desactivar suscripción (admin)
      */
     public function toggle($id)
     {

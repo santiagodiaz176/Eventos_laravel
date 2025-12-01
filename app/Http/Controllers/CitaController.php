@@ -52,7 +52,7 @@ class CitaController extends Controller
                 ->with('warning', 'Este evento ya tiene una cita registrada.');
         }
 
-        // 🔒 VALIDACIÓN CLAVE (NUEVA)
+        // Validar que la fecha de la cita sea anterior a la fecha del evento
         $fechaEvento = Carbon::parse($evento->fecha_evento)->startOfDay();
         $fechaCita   = Carbon::parse($request->fecha_cita)->startOfDay();
 

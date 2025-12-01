@@ -22,8 +22,8 @@ class LoginController extends Controller
         // Intentar autenticación solo si el usuario está activo
         if (Auth::attempt([
             'email' => $credentials['email'],
-            'password' => $credentials['clave'], // Laravel usa 'password' por defecto
-            'estado' => 1                         // solo usuarios activos
+            'password' => $credentials['clave'], 
+            'estado' => 1                         
         ])) {
             // Regenerar sesión
             $request->session()->regenerate();

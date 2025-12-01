@@ -135,7 +135,7 @@
 
                 <td class="acciones">
 
-                    {{-- ✅ PENDIENTE / POSPUESTA --}}
+                    {{-- PENDIENTE / POSPUESTA --}}
                     @if(in_array($estadoCita, ['Pendiente', 'Pospuesta']))
 
                         <form action="{{ route('admin.citas.update', $c->id_cita) }}"
@@ -161,7 +161,7 @@
                             </a>
                         @endif
 
-                    {{-- ✅ CITA APROBADA + EVENTO --}}
+                    {{-- CITA APROBADA + EVENTO --}}
                     @elseif($estadoCita === 'Aprobada' && $evento)
 
                         @if($evento->id_estado == 1)
@@ -203,8 +203,6 @@
     </table>
 </div>
 
-
-{{-- SUSCRIPCIONES --}}
 {{-- SUSCRIPCIONES --}}
 <div id="suscripciones" class="content">
 
@@ -214,7 +212,7 @@
         </div>
     @endif
 
-    {{-- ✅ Botón agregar --}}
+    {{-- Botón agregar --}}
     <a href="{{ route('admin.suscripciones.create') }}"
        class="btn"
        style="margin-bottom:10px;">
@@ -246,13 +244,13 @@
                 </td>
 
                 <td>
-                    {{-- ✅ Editar --}}
+                    {{--Editar --}}
                     <a href="{{ route('admin.suscripciones.editar', $s->id_suscripcion) }}"
                        class="btn btn-warning btn-sm">
                         <i class="fas fa-edit"></i>
                     </a>
 
-                    {{-- ✅ Activar / Desactivar --}}
+                    {{--Activar / Desactivar --}}
                     <form action="{{ route('admin.suscripciones.toggle', $s->id_suscripcion) }}"
                           method="POST"
                           style="display:inline;">
@@ -263,7 +261,7 @@
                         </button>
                     </form>
 
-                    {{-- ✅ Eliminar --}}
+                    {{-- Eliminar --}}
                     <form action="{{ route('admin.suscripciones.destroy', $s->id_suscripcion) }}"
                           method="POST"
                           style="display:inline;"
@@ -297,7 +295,7 @@ function mostrarTab(id){
     document.getElementById(id).classList.add('active');
 }
 
-/* ✅ Detecta ?tab=citas en la URL */
+/* Detecta ?tab=citas en la URL */
 const params = new URLSearchParams(window.location.search);
 const tab = params.get('tab');
 

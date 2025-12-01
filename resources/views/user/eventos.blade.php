@@ -48,24 +48,24 @@
                         <div class="cell-sm-6 cell-md-4">
                             <div class="event-card">
 
-                                {{-- ✅ TIPO DE EVENTO --}}
+                                {{-- TIPO DE EVENTO --}}
                                 <h4>
                                     {{ $evento->tipoevento->descripcion_tipoevento ?? 'Evento' }}
                                 </h4>
 
-                                {{-- ✅ FECHA --}}
+                                {{-- FECHA --}}
                                 <p>
                                     <strong>Fecha tentativa:</strong><br>
                                     {{ $evento->fecha_evento }}
                                 </p>
 
-                                {{-- ✅ CANTIDAD DE PERSONAS REAL --}}
+                                {{-- CANTIDAD DE PERSONAS REAL --}}
                                 <p>
                                     <strong>Personas:</strong>
                                     {{ $evento->cantidad_personas }}
                                 </p>
 
-                                {{-- ✅ ESTADO --}}
+                                {{-- ESTADO --}}
                                 <p>
                                     <strong>Estado:</strong>
                                     <span class="text-primary">

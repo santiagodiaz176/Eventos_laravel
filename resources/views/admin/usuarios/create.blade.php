@@ -92,12 +92,12 @@ input, select {
             <label>Perfil</label>
             <select name="perfil" required>
                 <option value="admin">Admin</option>
-                <option value="usuario">User</option>
+                <option value="user">User</option>
             </select>
         </div>
 
         <!-- Por defecto el estado será activo al crear -->
-        <input type="hidden" name="estado" value="activo">
+        <input type="hidden" name="estado" value="1">
 
         <button class="btn btn-primary" type="submit">
             Guardar Usuario

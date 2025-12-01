@@ -30,13 +30,13 @@ class AppServiceProvider extends ServiceProvider
 
             $suscrito = false;
 
-            // ✅ Caso 1: Usuario logueado
+            // Caso 1: Usuario logueado
             if (Auth::check()) {
                 $suscrito = Suscripcion::where('id_usuario', Auth::user()->id_usuario)
                     ->where('estado', 'activo')
                     ->exists();
             }
-            // ✅ Caso 2: Visitante (por cookie)
+            // Caso 2: Visitante (por cookie)
             else if (Cookie::has('suscrito_email')) {
                 $suscrito = Suscripcion::where('correo', Cookie::get('suscrito_email'))
                     ->where('estado', 'activo')

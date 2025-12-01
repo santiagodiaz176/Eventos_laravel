@@ -41,7 +41,7 @@ class CitaAdminController extends Controller
         switch ($request->accion) {
 
             case 'aceptar':
-                $cita->id_estadoserva = 2; // ✅ Aprobada
+                $cita->id_estadoserva = 2; // Aprobada
                 break;
 
             case 'posponer':
@@ -51,7 +51,7 @@ class CitaAdminController extends Controller
                     'hora_cita'  => 'required'
                 ]);
 
-                // 🔒 VALIDACIÓN CLAVE
+                // Validación clave: La nueva fecha de cita debe ser antes del día del evento
                 $fechaEvento = Carbon::parse($cita->evento->fecha_evento)->startOfDay();
                 $fechaCita   = Carbon::parse($request->fecha_cita)->startOfDay();
 
@@ -63,11 +63,11 @@ class CitaAdminController extends Controller
 
                 $cita->fecha_cita     = $request->fecha_cita;
                 $cita->hora_cita      = $request->hora_cita;
-                $cita->id_estadoserva = 4; // ✅ Pospuesta
+                $cita->id_estadoserva = 4; // Pospuesta
                 break;
 
             case 'cancelar':
-                $cita->id_estadoserva = 3; // ✅ Cancelada
+                $cita->id_estadoserva = 3; // Cancelada
                 break;
         }
 

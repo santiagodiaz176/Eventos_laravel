@@ -10,9 +10,7 @@ use Illuminate\Support\Facades\Auth;
 class EventoController extends Controller
 {
     /*
-    |--------------------------------------------------------------------------
     | USUARIO
-    |--------------------------------------------------------------------------
     */
 
     // Mostrar eventos del usuario
@@ -61,7 +59,7 @@ class EventoController extends Controller
             'cantidad_personas'  => $request->cantidad_personas,
             'id_usuario'         => Auth::id(),
             'id_tipoevento'      => $tipo->id_tipoevento,
-            'id_estado'          => 1, // ✅ Pendiente
+            'id_estado'          => 1, 
         ]);
 
         return redirect()
@@ -70,9 +68,7 @@ class EventoController extends Controller
     }
 
     /*
-    |--------------------------------------------------------------------------
     | ADMIN
-    |--------------------------------------------------------------------------
     */
 
     // Editar evento por admin
@@ -108,9 +104,9 @@ class EventoController extends Controller
 
         // Acción del admin
         if ($request->accion === 'aceptar') {
-            $evento->id_estado = 2; // ✅ Aceptado
+            $evento->id_estado = 2; 
         } else {
-            $evento->id_estado = 3; // ❌ Cancelado
+            $evento->id_estado = 3; 
         }
 
         $evento->save();

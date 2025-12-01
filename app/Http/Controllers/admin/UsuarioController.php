@@ -21,18 +21,18 @@ class UsuarioController extends Controller
             'nombre' => 'required|string|max:255',
             'apellidos' => 'required|string|max:255',
             'email' => 'required|email|unique:usuarios,email',
-            'perfil' => 'required|in:admin,user', // usar 'user' en vez de 'usuario'
-            'clave' => 'required|string|min:6|confirmed', // requiere input "clave_confirmation"
+            'perfil' => 'required|in:admin,user', 
+            'clave' => 'required|string|min:6|confirmed', 
         ]);
 
-        // Crear usuario, usando el email como "usuario" y estado booleano
+        // Crear usuario
         Usuario::create([
-            'usuario' => $request->email, // login será el email
+            'usuario' => $request->email, 
             'nombre' => $request->nombre,
             'apellidos' => $request->apellidos,
             'email' => $request->email,
             'perfil' => $request->perfil,
-            'estado' => true, // activo por defecto
+            'estado' => true, 
             'clave' => Hash::make($request->clave),
         ]);
 
@@ -55,8 +55,8 @@ class UsuarioController extends Controller
             'nombre' => 'required|string|max:255',
             'apellidos' => 'required|string|max:255',
             'email' => 'required|email|unique:usuarios,email,' . $id . ',id_usuario',
-            'perfil' => 'required|in:admin,user', // asegurarse que coincide con DB
-            'estado' => 'required', // recibimos 1 o 0 del select
+            'perfil' => 'required|in:admin,user', 
+            'estado' => 'required', 
         ]);
 
         // Asignar valores
@@ -64,7 +64,7 @@ class UsuarioController extends Controller
         $usuario->apellidos = $request->apellidos;
         $usuario->email = $request->email;
         $usuario->perfil = $request->perfil;
-        $usuario->estado = $request->estado == "1" ? 1 : 0; // convertir a entero/booleano
+        $usuario->estado = $request->estado == "1" ? 1 : 0; 
 
         // Guardar cambios
         $usuario->save();
