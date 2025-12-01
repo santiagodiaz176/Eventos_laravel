@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\User;
+use App\Models\Usuario;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 
@@ -42,11 +42,11 @@ class RegisterController extends Controller
             'password.regex' => 'La contraseña debe incluir mayúsculas, minúsculas y números.',
         ]);
 
-        User::create([
+        Usuario::create([
             'nombre' => $request->nombre,
             'apellidos' => $request->apellidos,
             'email' => $request->email,
-            'password' => Hash::make($request->password),
+            'clave' => Hash::make($request->password),
         ]);
 
         return redirect()->route('login')->with('success', 'Registro exitoso, ahora puedes iniciar sesión.');
