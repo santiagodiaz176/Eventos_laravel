@@ -123,51 +123,44 @@
 </section>
 
 <!-- Reserva -->
-<section class="section parallax-container bg-image-dark" data-parallax-img="{{ asset('images/boda1.jpg') }}">
+<section class="section parallax-container bg-image-dark"
+    data-parallax-img="{{ asset('images/boda1.jpg') }}">
     <div class="parallax-content">
         <section class="section-lg text-center">
             <div class="shell">
                 <div class="range range-50 range-sm-center range-md-reverse range-md-middle">
 
-                    <!-- Texto -->
+                    <!-- Texto (SE QUEDA IGUAL) -->
                     <div class="cell-md-6 cell-lg-5">
                         <div class="box-width-4 box-centered">
-                            <p class="heading-1">Disfruta con nosotros,<br> reserva</p>
+                            <p class="heading-1">
+                                Disfruta con nosotros,<br> reserva
+                            </p>
                             <div class="divider-small"></div>
-                            <p>Danos todos los detalles posibles para hacer tu sueño realidad.</p>
+                            <p>
+                                Danos todos los detalles posibles para hacer tu sueño realidad.
+                            </p>
                         </div>
                     </div>
 
-                    <!-- Formulario -->
-                    <div class="cell-sm-10 cell-md-6 cell-lg-7">
-                        <article class="box-bordered">
-                            <div class="box-bordered__main">
-                                <form class="rd-mailform" method="POST" action="{{ route('reserva.cita') }}">
-                                    @csrf
-                                    <div class="form-wrap">
-                                        <input class="form-input" id="contact-date" type="date" name="date" required>
-                                        <label class="form-label" for="contact-date">Fecha del evento</label>
-                                    </div>
-                                    <div class="form-wrap">
-                                        <input class="form-input" id="contact-name" type="text" name="name" required>
-                                        <label class="form-label" for="contact-name">Tu Nombre</label>
-                                    </div>
-                                    <div class="form-wrap">
-                                        <input class="form-input" id="contact-email" type="email" name="email" required>
-                                        <label class="form-label" for="contact-email">Correo electrónico</label>
-                                    </div>
-                                    <div class="form-wrap">
-                                        <label class="form-label" for="contact-message">
-                                            Cuéntanos, ¿qué tienes en mente para cumplir tus sueños?
-                                        </label>
-                                        <textarea class="form-input" id="contact-message" name="message" required></textarea>
-                                    </div>
-                                    <div class="form-wrap form-button offset-1">
-                                        <button class="button button-block button-primary-outline button-ujarak" type="submit">
-                                            Agendar una cita
-                                        </button>
-                                    </div>
-                                </form>
+                    <!-- BOTÓN EN VEZ DE FORMULARIO -->
+                    <div class="cell-sm-10 cell-md-6 cell-lg-7 wow fadeInLeft">
+                        <article class="box-line">
+                            <span></span><span></span><span></span><span></span>
+
+                            <div class="box-line__main text-center">
+                                <p class="heading-3">
+                                    ¿Listo para comenzar?
+                                </p>
+
+                                <p>
+                                    Crea tu evento y empieza a hacerlo realidad con nosotros.
+                                </p>
+
+                                <a href="{{ route('eventos.create') }}"
+                                   class="button button-block button-primary-outline button-ujarak">
+                                    Crear tu evento
+                                </a>
                             </div>
                         </article>
                     </div>

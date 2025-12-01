@@ -113,28 +113,54 @@
 
     {{-- RESERVA --}}
     <section class="section section-md bg-white">
-      <div class="shell">
-        <div class="range range-50 range-sm-center">
-          <div class="cell-sm-6">
-            <div class="box-width-4 box-centered">
-              <p class="heading-1">Disfruta con nosotros,<br> reserva.</p>
-              <p>Danos todos los detalles posibles para hacer tu sueño realidad.</p>
-            </div>
-          </div>
+  <div class="shell">
+    <div class="range range-50 range-sm-center range-md-middle">
 
-          <div class="cell-sm-6">
-            <article class="box-line">
-              <div class="box-line__main">
-                <label class="form-label">REGÍSTRATE CON NOSOTROS & HAZ TU RESERVA</label>
-                <div class="form-wrap form-button offset-1">
-                  <a href="{{ route('login') }}" class="button button-block button-primary-outline button-ujarak">Regístrate</a>
-                </div>
-              </div>
-            </article>
-          </div>
+      <!-- TEXTO -->
+      <div class="cell-sm-6 wow fadeInRight">
+        <div class="box-width-4 box-centered">
+          <p class="heading-1">
+            Disfruta con nosotros,<br> reserva.
+          </p>
+          <p>
+            Crea tu evento y comienza a hacerlo realidad con nuestro equipo.
+          </p>
         </div>
       </div>
-    </section>
+
+      <!-- CTA -->
+      <div class="cell-sm-6 wow fadeInLeft">
+        <article class="box-line">
+          <span></span><span></span><span></span><span></span>
+
+          <div class="box-line__main text-center">
+            <p class="heading-3">
+              ¿Listo para comenzar?
+            </p>
+
+            <p>
+              Crea tu evento y empieza a vivir la experiencia que tenemos preparada para ti.
+            </p>
+
+            @auth
+              <a href="{{ route('eventos.create') }}"
+                 class="button button-block button-primary-outline button-ujarak">
+                  Crear tu evento
+              </a>
+            @else
+              <a href="{{ route('login') }}"
+                 class="button button-block button-primary-outline button-ujarak">
+                  Iniciar sesión
+              </a>
+            @endauth
+
+          </div>
+        </article>
+      </div>
+
+    </div>
+  </div>
+</section>
 
     @include('partials.footer')
   @endsection

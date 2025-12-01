@@ -158,82 +158,24 @@
                 </div>
             </div>
 
-            <!-- FORM -->
+            <!-- CTA (MISMO DISEÑO DEL FORMULARIO) -->
             <div class="cell-sm-10 cell-md-6 wow fadeInLeft">
                 <article class="box-line">
                     <span></span><span></span><span></span><span></span>
 
-                    <div class="box-line__main">
+                    <div class="box-line__main text-center">
+                        <p class="heading-3">
+                            ¿Quieres comenzar ya?
+                        </p>
 
-                        <!-- FORMULARIO MIGRADO -->
-                        <form class="rd-mailform"
-                              method="POST"
-                              action="{{ route('reserva.cita') }}">
-                            @csrf
+                        <p>
+                            Crea tu evento y deja el resto en nuestras manos.
+                        </p>
 
-                            <div class="form-wrap">
-                                <input class="form-input"
-                                       type="text"
-                                       name="nombre"
-                                       required>
-                                <label class="form-label">Nombre completo</label>
-                            </div>
-
-                            <div class="form-wrap">
-                                <input class="form-input"
-                                       type="text"
-                                       name="telefono"
-                                       required>
-                                <label class="form-label">Celular</label>
-                            </div>
-
-                            <div class="form-wrap">
-                                <input class="form-input"
-                                       type="email"
-                                       name="correo"
-                                       required>
-                                <label class="form-label">Correo electrónico</label>
-                            </div>
-
-                            <div class="form-wrap">
-                                <input class="form-input"
-                                       type="date"
-                                       name="fecha_cita"
-                                       required>
-                                <label class="form-label">Fecha de la cita</label>
-                            </div>
-
-                            <div class="form-wrap">
-                                <input class="form-input"
-                                       type="time"
-                                       name="hora_cita"
-                                       required>
-                                <label class="form-label">Horario de la cita</label>
-                            </div>
-
-                            <div class="form-wrap">
-                                <select class="form-input"
-                                        name="tipo_evento"
-                                        required>
-                                    <option value="" hidden></option>
-                                    <option value="boda">Boda</option>
-                                    <option value="XV">XV</option>
-                                    <option value="primera_comunion">Primera comunión</option>
-                                    <option value="cumpleaños">Cumpleaños</option>
-                                    <option value="empresarial">Empresarial</option>
-                                </select>
-                                <label class="form-label">Tipo de evento</label>
-                            </div>
-
-                            <div class="form-wrap form-button offset-1">
-                                <button type="submit"
-                                        class="button button-block button-primary-outline button-ujarak">
-                                    Agendar cita
-                                </button>
-                            </div>
-
-                        </form>
-
+                        <a href="{{ route('eventos.create') }}"
+                           class="button button-block button-primary-outline button-ujarak">
+                            Crear tu evento
+                        </a>
                     </div>
                 </article>
             </div>
