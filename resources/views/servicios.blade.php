@@ -126,7 +126,7 @@
               <div class="box-line__main">
                 <label class="form-label">REGÍSTRATE CON NOSOTROS & HAZ TU RESERVA</label>
                 <div class="form-wrap form-button offset-1">
-                  <a href="{{ route('login') }}" class="button button-block button-primary-outline button-ujarak">Regístrate</a>
+                  <a href="{{ route('register') }}" class="button button-block button-primary-outline button-ujarak">Regístrate</a>
                 </div>
               </div>
             </article>

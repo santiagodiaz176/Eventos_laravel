@@ -163,7 +163,7 @@
                       <br>
                       </div>
                       <div class="form-wrap form-button offset-1">
-                        <a href="{{ route('login') }}" class="button button-block button-primary-outline button-ujarak">Regístrate</a>
+                        <a href="{{ route('register') }}" class="button button-block button-primary-outline button-ujarak">Regístrate</a>
                       </div>
                     </form>
                   </div>

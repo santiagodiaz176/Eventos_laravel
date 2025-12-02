@@ -20,7 +20,6 @@ class Evento extends Model
         'cantidad_personas',
         'id_usuario',
         'id_tipoevento',
-        'id_metodo_pago',
         'id_estado'
     ];
 

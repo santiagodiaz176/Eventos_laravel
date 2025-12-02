@@ -21,11 +21,13 @@
           <!-- RD Navbar Nav-->
           <div class="rd-navbar-nav-wrap">
             <div class="rd-navbar-element">
-              <ul class="list-icons list-inline-sm">
-                <li><a class="icon icon-sm fa fa-instagram icon-style-camera" href="#"><span></span><span></span><span></span><span></span></a></li>
-                <li><a class="icon icon-sm fa fa-facebook icon-style-camera" href="#"><span></span><span></span><span></span><span></span></a></li>
-              </ul>
+              <a href="{{ route('login') }}"
+                  class="button button-sm button-primary"
+                  style="background-color:#1e90ff;border-color:#1e90ff;">
+                  Iniciar sesión
+              </a>
             </div>
+
             <!-- RD Navbar Nav-->
             <ul class="rd-navbar-nav">
               <li class="{{ Request::is('/') ? 'active' : '' }}">
