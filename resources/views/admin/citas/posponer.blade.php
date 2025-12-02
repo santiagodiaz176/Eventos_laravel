@@ -80,10 +80,25 @@
         required>
 
         <label>Hora de la Cita</label>
-        <input type="time" name="hora_cita"
-               class="form-control"
-               value="{{ $cita->hora_cita }}" required>
-
+<select name="hora_cita" class="form-control" required>
+    <option value="">Seleccione una hora</option>
+    @php
+        $horario = \App\Models\HorarioAtencion::first();
+        if ($horario) {
+            $inicio = \Carbon\Carbon::createFromFormat('H:i:s', $horario->hora_inicio);
+            $fin = \Carbon\Carbon::createFromFormat('H:i:s', $horario->hora_fin);
+            $citaHora = substr($cita->hora_cita, 0, 5);
+            
+            while($inicio < $fin) {
+                $horaFormato = $inicio->format('H:i');
+                $horaDisplay = $inicio->format('h:i A');
+                $selected = ($horaFormato == $citaHora) ? 'selected' : '';
+                echo "<option value='$horaFormato' $selected>$horaDisplay</option>";
+                $inicio->addHour();
+            }
+        }
+    @endphp
+</select>
         <div style="text-align:center; margin-top:20px;">
             <button type="submit" class="button-primary">
                 Guardar Cambios
@@ -91,7 +106,7 @@
         </div>
     </form>
 
-    <a href="{{ route('admin.citas.index') }}" class="btn-back">
+    <a href="{{ route('admin.index', ['tab' => 'citas']) }}" class="btn btn-secondary">
         ← Volver a Citas
     </a>
 </div>

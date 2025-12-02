@@ -13,6 +13,7 @@ use App\Http\Controllers\AdminController;
 use App\Http\Controllers\Admin\UsuarioController;
 use App\Http\Controllers\Admin\CitaAdminController;
 use App\Http\Controllers\SuscripcionController;
+use App\Http\Controllers\Admin\HorarioAtencionController;
 
 /*
 | Rutas específicas PRIMERO
@@ -62,6 +63,8 @@ Route::middleware(['auth'])->group(function () {
     // Contacto usuario
     Route::get('/usuario/contacto', [ContactController::class, 'index'])->name('usuario.contacto');
     Route::post('/usuario/contacto', [ContactController::class, 'submit'])->name('usuario.contact.submit');
+
+    Route::get('/citas/horas', [CitaController::class, 'horasDisponibles'])->name('citas.horas');
 });
 
 /*
@@ -99,6 +102,9 @@ Route::prefix('admin')->middleware(['auth', 'admin'])->group(function () {
     Route::delete('/suscripciones/{id}', [SuscripcionController::class, 'destroy'])->name('admin.suscripciones.destroy');
     Route::put('/suscripciones/{id}/toggle', [SuscripcionController::class, 'toggle'])->name('admin.suscripciones.toggle');
 
+    // Horarios de atención CRUD
+    Route::get('/admin/horarios', [HorarioAtencionController::class, 'index'])->name('admin.horarios');
+    Route::post('/admin/horarios', [HorarioAtencionController::class, 'store'])->name('admin.horarios.store');
 });
 
 /*

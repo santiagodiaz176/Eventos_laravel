@@ -79,9 +79,21 @@
 
             <div class="col-md-6">
                 <label>Hora:</label>
-                <input type="time" name="hora_evento" class="form-control" required>
+                <select name="hora_evento" class="form-control" required>
+                <option value="">Seleccione una hora</option>
+                    @for ($hour = 0; $hour < 24; $hour++)
+                    @foreach ([0, 30] as $minute)
+                        @php
+                        $time24 = sprintf('%02d:%02d', $hour, $minute);
+                        $hour12 = $hour == 0 ? 12 : ($hour > 12 ? $hour - 12 : $hour);
+                        $ampm = $hour < 12 ? 'AM' : 'PM';
+                        $timeDisplay = sprintf('%d:%02d %s', $hour12, $minute, $ampm);
+                        @endphp
+                <option value="{{ $time24 }}">{{ $timeDisplay }}</option>
+                    @endforeach
+                    @endfor
+                </select>
             </div>
-        </div>
 
         <label>Lugar:</label>
         <input type="text" name="lugar_evento" class="form-control" required>

@@ -107,6 +107,14 @@
         </div>
     @endif
 
+    <div class="mb-3">
+      <a href="{{ route('admin.horarios') }}"
+        class="btn btn-info">
+        Horario de atención
+      </a>
+    </div>
+
+
     <table class="tabla-admin">
         <thead>
             <tr>

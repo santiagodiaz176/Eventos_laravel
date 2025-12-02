@@ -12,20 +12,24 @@ return new class extends Migration
             $table->id('id_cita');
             $table->string('nombre', 60);
             $table->string('telefono', 20);
-            $table->string('correo', 255)->nullable(); // correo del usuario
+            $table->string('correo', 255)->nullable();
             $table->date('fecha_cita');
-            $table->time('hora_cita')->nullable(); // hora de la cita
-            $table->string('tipo_evento', 50)->nullable(); // tipo de evento
-            $table->timestamp('fecha_registro')->useCurrent(); // fecha de registro automática
+            // dejamos hora_cita por compatibilidad, pero puede ser nullable
+            $table->time('hora_cita')->nullable();
+            $table->string('tipo_evento', 50)->nullable();
+            $table->timestamp('fecha_registro')->useCurrent();
 
             // FK usuario
-            $table->unsignedBigInteger('id_usuario');
+            $table->unsignedBigInteger('id_usuario')->nullable();
 
             // FK estado reserva
-            $table->unsignedBigInteger('id_estadoserva');
+            $table->unsignedBigInteger('id_estadoserva')->nullable();
 
-            // FK evento
-            $table->unsignedBigInteger('id_evento'); // <-- Nueva columna
+            // FK evento (si tu diseño lo requiere)
+            $table->unsignedBigInteger('id_evento')->nullable();
+
+            // FK HORARIO ATENCION
+            $table->unsignedBigInteger('id_horario')->nullable();
 
             // Relaciones
             $table->foreign('id_usuario')
@@ -44,6 +48,12 @@ return new class extends Migration
                   ->references('id_evento')
                   ->on('eventos')
                   ->onDelete('cascade')
+                  ->onUpdate('cascade');
+
+            $table->foreign('id_horario')
+                  ->references('id_horario')
+                  ->on('horarios_atencion')
+                  ->onDelete('restrict')
                   ->onUpdate('cascade');
         });
     }
