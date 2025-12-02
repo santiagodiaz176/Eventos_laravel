@@ -66,10 +66,11 @@
                             <p class="heading-5">Socials</p>
                             <div class="divider-modern"></div>
                             <ul class="list-inline-xs">
-                                <li><a class="icon icon-md icon-gray-7 fa fa-facebook" href="#"></a></li>
-                                <li><a class="icon icon-md icon-gray-7 fa fa-twitter" href="#"></a></li>
-                                <li><a class="icon icon-md icon-gray-7 fa fa-google" href="#"></a></li>
-                                <li><a class="icon icon-md icon-gray-7 fa fa-youtube" href="#"></a></li>
+                                <li><a class="icon icon-md icon-gray-7 fa fa-facebook" href="#">acebook.</a></li>
+                                <br>
+                                <li><a class="icon icon-md icon-gray-7 fa fa-twitter" href="#">Twitter.</a></li>
+                                <br>
+                                <li><a class="icon icon-md icon-gray-7 fa fa-google" href="#">oogle.</a></li>
                             </ul>
                         </div>
                         <div class="layout-columns__aside-item">

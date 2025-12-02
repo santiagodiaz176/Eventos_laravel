@@ -84,7 +84,7 @@
     <div class="shell">
 
         <h1>Blog</h1>
-        <p><span>IDEAS & ANUNCIOS </span><a href="#">Click aquí!</a></p>
+        <p><span>IDEAS & ANUNCIOS </span></p>
 
         <div class="range range-50 range-sm-center">
 
@@ -143,7 +143,7 @@
             <div class="cell-sm-10 cell-md-6">
                 <article class="box-line">
                     <div class="box-line__main">
-                        <label class="form-label">REGÍSTRATE CON NOSOTROS & HAZ TU RESERVA</label>
+                      
                         <div class="form-wrap form-button offset-1">
                             <a href="{{ route('register') }}" class="button button-block button-primary-outline button-ujarak">
                                 Regístrate

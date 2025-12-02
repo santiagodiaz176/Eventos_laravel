@@ -107,6 +107,9 @@
 
         <!-- mini galeria   -->
         <!-- mini galeria   -->
+
+
+        
 <section class="section section-md bg-white text-center">
   <div class="container" style="max-width: 1400px; margin: 0 auto; padding: 0 15px;">
     <p class="heading-1">Galería</p>

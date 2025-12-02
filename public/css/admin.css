@@ -17,7 +17,7 @@
         .barra {
            display: flex;
            position: absolute;
-            top: -13%;           /* Centra verticalmente */
+            top: -7.5%;           /* Centra verticalmente */
             left: 18%;         /* Centra horizontalmente */
             border-radius: 8px;
             align-items: center;
@@ -30,8 +30,8 @@
         }
              .barra_logo {
              height: 55px;
-            top: 63px;
-            left: -130%;
+            top: 25px;
+            left: -109%;
             position: relative;
         }
         .logout-btn {
@@ -39,7 +39,7 @@
             border: none;
             position: relative;
             left: 130%;
-            top: 12px;
+            top: 20px;
             color: white;
             padding: 8px 16px;
             border-radius: 6px;
