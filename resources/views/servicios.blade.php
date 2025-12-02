@@ -112,28 +112,33 @@
 
     {{-- RESERVA --}}
     <section class="section section-md bg-white">
-      <div class="shell">
+    <div class="shell">
         <div class="range range-50 range-sm-center">
-          <div class="cell-sm-6">
-            <div class="box-width-4 box-centered">
-              <p class="heading-1">Disfruta con nosotros,<br> reserva.</p>
-              <p>Danos todos los detalles posibles para hacer tu sueño realidad.</p>
-            </div>
-          </div>
-
-          <div class="cell-sm-6">
-            <article class="box-line">
-              <div class="box-line__main">
-                <label class="form-label">REGÍSTRATE CON NOSOTROS & HAZ TU RESERVA</label>
-                <div class="form-wrap form-button offset-1">
-                  <a href="{{ route('register') }}" class="button button-block button-primary-outline button-ujarak">Regístrate</a>
+            {{-- Columna Izquierda --}}
+            <div class="cell-sm-6 wow fadeInLeft">
+                <div class="box-width-4 box-centered">
+                    <p class="heading-1">Disfruta con nosotros,<br> reserva.</p>
+                    <p style="margin-top: 20px;">Danos todos los detalles posibles para hacer tu sueño realidad.</p>
                 </div>
-              </div>
-            </article>
-          </div>
+            </div>
+
+            {{-- Columna Derecha: REGISTRO --}}
+            <div class="cell-sm-6 wow fadeInRight">
+                <article class="box-line" style="padding: 60px 40px; text-align: center; background: #f8f9fa; border-radius: 10px;">
+                    <div class="box-line__main">
+                        
+                        
+                        <div class="form-wrap form-button">
+                            <a href="{{ route('register') }}" class="button button-block button-primary-outline button-ujarak" style="max-width: 300px; margin: 0 auto; padding: 15px 30px;">
+                                REGÍSTRATE
+                            </a>
+                        </div>
+                    </div>
+                </article>
+            </div>
         </div>
-      </div>
-    </section>
+    </div>
+</section>
 
     @include('partials.footer')
   @endsection

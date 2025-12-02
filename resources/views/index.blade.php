@@ -72,12 +72,13 @@
             <div class="range range-50 range-sm-center range-md-left range-md-middle range-md-reverse">
               <div class="cell-sm-6 wow fadeInRightSmall">
                 <div class="thumb-line">
-                  <video controls src="{{ asset('images/Dreams_2.mp4') }}" width="551" height="430">
+                  <video controls style="width: 100%; max-width: 551px; height: 430px;">
                     <track kind="captions" src="{{ asset('videos/captions.vtt') }}" srclang="es" label="Español">
                     Tu navegador no soporta el elemento de video.
-                  </video>
+                    </video>
                 </div>
-                <div class="cell-sm-6">
+              </div>
+              <div class="cell-sm-6">
                 <div class="box-width-3">
                   <p class="heading-1 wow fadeInLeftSmall">Acerca de nosotros</p>
                   <article class="quote-big wow fadeInLeftSmall" data-wow-delay=".1s">
@@ -86,7 +87,6 @@
                   <div class="divider wow fadeInLeftSmall" data-wow-delay=".2s"></div>
                   <p class="wow fadeInLeftSmall" data-wow-delay=".3s">...</p><a class="button button-primary-outline button-ujarak button-size-1 wow fadeInLeftSmall" href="{{ route('about') }}" data-wow-delay=".4s">Leer más</a>
                 </div>
-              </div>
               </div>
             </div>
           </div>

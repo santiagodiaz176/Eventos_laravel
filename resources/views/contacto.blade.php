@@ -1,10 +1,16 @@
-@extends('layouts.app')
+  @extends('layouts.app')
 
-@section('title', 'Contáctanos')
+  @section('title', 'Contáctanos')
+
+@section('styles')
+<link rel="stylesheet" href="{{ asset('css/bootstrap.css') }}">
+<link rel="stylesheet" href="{{ asset('css/style.css') }}">
+
 
 @section('content')
 
 @include('partials.navbar')
+
 
 <section class="breadcrumbs-custom bg-image" style="background-image: url({{ asset('images/1111.jpg') }});">
     <div class="shell">
@@ -15,6 +21,7 @@
         </ul>
     </div>
 </section>
+
 
 <!-- Get in Touch -->
 <section class="section section-md bg-white text-center">
@@ -29,26 +36,27 @@
 
                             <!-- Formulario de registro/reserva -->
                             <form class="rd-mailform" method="POST" action="{{ route('contact.submit') }}">
-                                @csrf
-                                <div class="cell-sm-10 cell-md-6 wow fadeInLeft">
-                                    <article class="box-line">
-                                        <div class="box-line__main">
-                                            <p>Regístrate con nosotros, así podrás agendar una cita y podremos cumplir tu sueño.</p>
-                                        </div>
+    @csrf
+    <div class="cell-sm-10 cell-md-6 wow fadeInLeft">
+        <article class="box-line">
+            <div class="box-line__main">
+                <p>Regístrate con nosotros, así podrás agendar una cita y podremos cumplir tu sueño.</p>
+            </div>
 
-                                        <div class="form-wrap">
-                                            <label class="form-label">REGÍSTRATE CON NOSOTROS & HAZ TU RESERVA</label>
-                                            <div class="box-width-4 box-centered">
-                                                <p>Danos todos los detalles posibles para hacer tu sueño realidad.</p>
-                                            </div>
-                                        </div>
+            <div class="form-wrap" style="margin: 40px 0 20px 0;">
+                <label class="form-label" style="display: block; margin-bottom: 15px;">
+                    REGÍSTRATE CON NOSOTROS & HAZ TU RESERVA
+                </label>
+            </div>
 
-                                        <div class="form-wrap form-button offset-1">
-                                            <a href="{{ url('register') }}" class="button button-block button-primary-outline button-ujarak">Regístrate</a>
-                                        </div>
-                                    </article>
-                                </div>
-                            </form>
+            <div class="form-wrap form-button offset-1" style="margin-top: 80px;">
+                <a href="{{ route('register') }}" class="button button-block button-primary-outline button-ujarak">
+                    Regístrate
+                </a>
+            </div>
+        </article>
+    </div>
+</form>
 
                         </div>
                     </div>
@@ -102,7 +110,7 @@
 
 <!-- Leaflet -->
 <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
-   <link href="https://fonts.googleapis.com/css2?family=Allura&family=Great+Vibes&display=swap" rel="stylesheet"><<
+   <link href="https://fonts.googleapis.com/css2?family=Allura&family=Great+Vibes&display=swap" rel="stylesheet">
 <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
 
 <script>
@@ -157,4 +165,8 @@ marker.bindPopup(`
 
 @include('partials.footer')
 
+@endsection
+@section('scripts')
+<script src="{{ asset('js/core.min.js') }}"></script>
+<script src="{{ asset('js/script.js') }}"></script>
 @endsection

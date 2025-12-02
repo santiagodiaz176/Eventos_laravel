@@ -6,8 +6,23 @@
   <style>
       .ie-panel{display: none;background: #212121;padding: 10px 0;box-shadow: 3px 3px 5px 0 rgba(0,0,0,.3);clear: both;text-align:center;position: relative;z-index: 1;}
       html.ie-10 .ie-panel, html.lt-ie-10 .ie-panel {display: block;}
+      
+      /* Galería uniforme */
+      .thumb-ruby {
+          display: block;
+          position: relative;
+          overflow: hidden;
+          height: 300px; /* Altura fija para todas las imágenes */
+      }
+      
+      .thumb-ruby__image {
+          width: 100%;
+          height: 100%;
+          object-fit: cover; /* Mantiene proporciones sin deformar */
+          display: block;
+      }
   </style>
-  @endsection
+@endsection
 
   @section('content')
       <div class="ie-panel"><a href="http://windows.microsoft.com/en-US/internet-explorer/"><img src="{{ asset('images/ie8-panel/warning_bar_0000_us.jpg') }}" height="42" width="820" alt="You are using an outdated browser. For a faster, safer browsing experience, upgrade for free today."></a></div>
@@ -84,64 +99,84 @@
                   <article class="quote-big wow fadeInLeftSmall" data-wow-delay=".1s">
                     <p class="q">La mejor empresa de Medellín y su área metropolitana en organización de reuniones y eventos sociales.</p>
                   </article>
-                  <div class="divider wow fadeInLeftSmall" data-wow-delay=".2s"></div>
-                  <p class="wow fadeInLeftSmall" data-wow-delay=".3s">...</p><a class="button button-primary-outline button-ujarak button-size-1 wow fadeInLeftSmall" href="{{ route('about') }}" data-wow-delay=".4s">Leer más</a>
                 </div>
               </div>
             </div>
           </div>
         </section>
-
-        <!-- Awards-->
 
         <!-- mini galeria   -->
-        <section class="section section-md bg-white text-center">
-          <div class="shell-fluid">
-            <p class="heading-1">Galería</p>
-            <div class="isotope thumb-ruby-wrap wow fadeIn" data-isotope-layout="masonry" data-isotope-group="gallery" data-lightgallery="group">
-              <div class="row">
-                <div class="col-xs-12 col-sm-6 col-md-4 col-lg-3 isotope-item"><a class="thumb-ruby thumb-mixed_height-2 thumb-mixed_md" href="{{ asset('images/sa.png') }}" data-lightgallery="item"><img class="thumb-ruby__image" src="{{ asset('images/sa.png') }}" alt="Salón de eventos" width="440" height="327"/>
-                          <div class="thumb-ruby__caption">
-                            <p class="thumb-ruby__title heading-3">Salones</p>
-                            <p class="thumb-ruby__text">If you are looking for high quality wedding photography, I will be glad to help you.</p>
-                          </div></a>
-                </div>
-                <div class="col-xs-12 col-sm-6 col-md-4 col-lg-3 isotope-item"><a class="thumb-ruby thumb-mixed_height-3 thumb-mixed_md" href="{{ asset('images/parj.png') }}" data-lightgallery="item"><img class="thumb-ruby__image" src="{{ asset('images/parj.png') }}" alt="" width="444" height="683"/>
-                          <div class="thumb-ruby__caption">
-                            <p class="thumb-ruby__title heading-3">Boda</p>
-                            <p class="thumb-ruby__text">If you are looking for high quality wedding photography, I will be glad to help you.</p>
-                          </div></a>
-                </div>
-                <div class="col-xs-12 col-sm-6 col-md-4 col-lg-3 isotope-item"><a class="thumb-ruby thumb-mixed_height-2 thumb-mixed_md" href="{{ asset('images/xv.png') }}" data-lightgallery="item"><img class="thumb-ruby__image" src="{{ asset('images/xv.png') }}" alt="" width="440" height="327"/>
-                          <div class="thumb-ruby__caption">
-                            <p class="thumb-ruby__title heading-3">XV</p>
-                            <p class="thumb-ruby__text">If you are looking for high quality wedding photography, I will be glad to help you.</p>
-                          </div></a>
-                </div>
-                <div class="col-xs-12 col-sm-6 col-md-4 col-lg-3 isotope-item"><a class="thumb-ruby thumb-mixed_height-3 thumb-mixed_md" href="{{ asset('images/par.png') }}" data-lightgallery="item"><img class="thumb-ruby__image" src="{{ asset('images/par.png') }}" alt="" width="444" height="683"/>
-                          <div class="thumb-ruby__caption">
-                            <p class="thumb-ruby__title heading-3">Boda</p>
-                            <p class="thumb-ruby__text">If you are looking for high quality wedding photography, I will be glad to help you.</p>
-                          </div></a>
-                </div>
-                <div class="col-xs-12 col-sm-6 col-md-4 col-lg-3 isotope-item"><a class="thumb-ruby thumb-mixed_height-2 thumb-mixed_md" href="{{ asset('images/cum.png') }}" data-lightgallery="item"><img class="thumb-ruby__image" src="{{ asset('images/cum.png') }}" alt="" width="440" height="327"/>
-                          <div class="thumb-ruby__caption">
-                            <p class="thumb-ruby__title heading-3">Cumpleaños</p>
-                            <p class="thumb-ruby__text">If you are looking for high quality wedding photography, I will be glad to help you.</p>
-                          </div></a>
-                </div>
-                <div class="col-xs-12 col-sm-6 col-md-4 col-lg-3 isotope-item"><a class="thumb-ruby thumb-mixed_height-2 thumb-mixed_md" href="{{ asset('images/comunion.jpg') }}" data-lightgallery="item"><img class="thumb-ruby__image" src="{{ asset('images/comunion.jpg') }}" alt="" width="440" height="327"/>
-                          <div class="thumb-ruby__caption">
-                            <p class="thumb-ruby__title heading-3">Comuniones</p>
-                            <p class="thumb-ruby__text">If you are looking for high quality wedding photography, I will be glad to help you.</p>
-                          </div></a>
-                </div>
-              </div>
-            </div>
+        <!-- mini galeria   -->
+<section class="section section-md bg-white text-center">
+  <div class="container" style="max-width: 1400px; margin: 0 auto; padding: 0 15px;">
+    <p class="heading-1">Galería</p>
+    <div class="row" style="display: flex; flex-wrap: wrap; justify-content: center; margin: 0 -15px;">
+      
+      <div class="col-xs-12 col-sm-6 col-md-4 col-lg-3" style="padding: 15px;">
+        <a class="thumb-ruby thumb-mixed_height-2 thumb-mixed_md" href="{{ asset('images/sa.png') }}" data-lightgallery="item" style="display: block; position: relative; overflow: hidden;">
+          <img class="thumb-ruby__image" src="{{ asset('images/sa.png') }}" alt="Salón de eventos" style="width: 100%; height: auto; display: block;"/>
+          <div class="thumb-ruby__caption">
+            <p class="thumb-ruby__title heading-3">Salones</p>
+            <p class="thumb-ruby__text">If you are looking for high quality wedding photography, I will be glad to help you.</p>
           </div>
-        </section>
+        </a>
+      </div>
+      
+      <div class="col-xs-12 col-sm-6 col-md-4 col-lg-3" style="padding: 15px;">
+        <a class="thumb-ruby thumb-mixed_height-3 thumb-mixed_md" href="{{ asset('images/parj.png') }}" data-lightgallery="item" style="display: block; position: relative; overflow: hidden;">
+          <img class="thumb-ruby__image" src="{{ asset('images/parj.png') }}" alt="" style="width: 100%; height: auto; display: block;"/>
+          <div class="thumb-ruby__caption">
+            <p class="thumb-ruby__title heading-3">Boda</p>
+            <p class="thumb-ruby__text">If you are looking for high quality wedding photography, I will be glad to help you.</p>
+          </div>
+        </a>
+      </div>
+      
+      <div class="col-xs-12 col-sm-6 col-md-4 col-lg-3" style="padding: 15px;">
+        <a class="thumb-ruby thumb-mixed_height-2 thumb-mixed_md" href="{{ asset('images/xv.png') }}" data-lightgallery="item" style="display: block; position: relative; overflow: hidden;">
+          <img class="thumb-ruby__image" src="{{ asset('images/xv.png') }}" alt="" style="width: 100%; height: auto; display: block;"/>
+          <div class="thumb-ruby__caption">
+            <p class="thumb-ruby__title heading-3">XV</p>
+            <p class="thumb-ruby__text">If you are looking for high quality wedding photography, I will be glad to help you.</p>
+          </div>
+        </a>
+      </div>
+      
+      <div class="col-xs-12 col-sm-6 col-md-4 col-lg-3" style="padding: 15px;">
+        <a class="thumb-ruby thumb-mixed_height-3 thumb-mixed_md" href="{{ asset('images/par.png') }}" data-lightgallery="item" style="display: block; position: relative; overflow: hidden;">
+          <img class="thumb-ruby__image" src="{{ asset('images/par.png') }}" alt="" style="width: 100%; height: auto; display: block;"/>
+          <div class="thumb-ruby__caption">
+            <p class="thumb-ruby__title heading-3">Boda</p>
+            <p class="thumb-ruby__text">If you are looking for high quality wedding photography, I will be glad to help you.</p>
+          </div>
+        </a>
+      </div>
+      
+      <div class="col-xs-12 col-sm-6 col-md-4 col-lg-3" style="padding: 15px;">
+        <a class="thumb-ruby thumb-mixed_height-2 thumb-mixed_md" href="{{ asset('images/cum.png') }}" data-lightgallery="item" style="display: block; position: relative; overflow: hidden;">
+          <img class="thumb-ruby__image" src="{{ asset('images/cum.png') }}" alt="" style="width: 100%; height: auto; display: block;"/>
+          <div class="thumb-ruby__caption">
+            <p class="thumb-ruby__title heading-3">Cumpleaños</p>
+            <p class="thumb-ruby__text">If you are looking for high quality wedding photography, I will be glad to help you.</p>
+          </div>
+        </a>
+      </div>
+      
+      <div class="col-xs-12 col-sm-6 col-md-4 col-lg-3" style="padding: 15px;">
+        <a class="thumb-ruby thumb-mixed_height-2 thumb-mixed_md" href="{{ asset('images/comunion.jpg') }}" data-lightgallery="item" style="display: block; position: relative; overflow: hidden;">
+          <img class="thumb-ruby__image" src="{{ asset('images/comunion.jpg') }}" alt="" style="width: 100%; height: auto; display: block;"/>
+          <div class="thumb-ruby__caption">
+            <p class="thumb-ruby__title heading-3">Comuniones</p>
+            <p class="thumb-ruby__text">If you are looking for high quality wedding photography, I will be glad to help you.</p>
+          </div>
+        </a>
+      </div>
+      
+    </div>
+  </div>
+</section>
 
-    <!-- FORMULARIO DE RESERVA -->
+    <!-- FORMULARIO DE  -->
 <section class="section section-md bg-white">
     <div class="shell">
         <div class="range range-50 range-sm-center range-md-left range-md-reverse range-md-middle">
@@ -161,7 +196,6 @@
             <!-- CTA (MISMO DISEÑO DEL FORMULARIO) -->
             <div class="cell-sm-10 cell-md-6 wow fadeInLeft">
                 <article class="box-line">
-                    <span></span><span></span><span></span><span></span>
 
                     <div class="box-line__main text-center">
                         <p class="heading-3">
@@ -184,8 +218,7 @@
     </div>
 </section>
 
-
-    {{-- FOOTER --}}
+ 
     @include('partials.footer')
 
 </div>
@@ -195,3 +228,5 @@
 <script src="{{ asset('js/core.min.js') }}"></script>
 <script src="{{ asset('js/script.js') }}"></script>
 @endsection
+
+

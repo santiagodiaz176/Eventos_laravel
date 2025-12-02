@@ -29,8 +29,7 @@
         <div class="range range-50 range-sm-center range-md-left">
 
             <div class="cell-sm-6 cell-md-5">
-                <div class="thumb-line">
-                    <video controls width="551" height="430">
+                <div class="thumb-line"><video controls style="width: 100%; max-width: 551px; height: 430px;">
                         <source src="{{ asset('images/Dreams_2.mp4') }}" type="video/mp4">
                     </video>
                 </div>
