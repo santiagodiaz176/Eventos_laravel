@@ -28,6 +28,8 @@
     {{-- Contenido principal --}}
     @yield('content')
 
+    <script src="{{ asset('js/validaciones.js') }}"></script>
+
     <!-- Scripts base -->
     <script src="{{ asset('js/jquery-latest.js') }}"></script>
 

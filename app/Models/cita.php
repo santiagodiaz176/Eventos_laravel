@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use App\Models\HorarioAtencion;
 
 class Cita extends Model
 {
@@ -20,11 +21,12 @@ class Cita extends Model
         'tipo_evento',
         'fecha_registro',
         'id_usuario',
-        'id_evento',        
+        'id_evento',
         'id_estadoserva',
+        'id_horario', 
     ];
 
-    //RELACIONES
+    // RELACIONES
     public function estado()
     {
         return $this->belongsTo(EstadoReserva::class, 'id_estadoserva');
@@ -38,5 +40,10 @@ class Cita extends Model
     public function evento()
     {
         return $this->belongsTo(Evento::class, 'id_evento');
+    }
+
+    public function horario()
+    {
+        return $this->belongsTo(HorarioAtencion::class, 'id_horario', 'id_horario');
     }
 }

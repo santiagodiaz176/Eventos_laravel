@@ -55,46 +55,111 @@
         </div>
     @endif
 
-    <form action="{{ route('eventos.store') }}" method="POST">
+    <form action="{{ route('eventos.store') }}" method="POST" id="form-crear-evento">
         @csrf
 
         <div class="row">
             <div class="col-md-6">
                 <label>Nombre del evento:</label>
-                <input type="text" name="nombre_evento" class="form-control" required>
+                <input type="text" 
+                       name="nombre_evento" 
+                       class="form-control" 
+                       data-validate="nombre-evento"
+                       maxlength="30"
+                       required>
             </div>
 
             <div class="col-md-6">
                 <label>Cantidad de personas:</label>
-                <input type="number" name="cantidad_personas" class="form-control" min="1" required>
+                <input type="number" 
+                       name="cantidad_personas" 
+                       class="form-control" 
+                       data-validate="cantidad-personas"
+                       min="1"
+                       required>
             </div>
         </div>
 
         <div class="row">
             <div class="col-md-6">
                 <label>Fecha:</label>
-                <input type="date" name="fecha_evento" class="form-control" 
-                min="{{ now()->addDay()->toDateString() }}" required>
+                <input type="date" 
+                       name="fecha_evento" 
+                       class="form-control" 
+                       data-validate="fecha-futura"
+                       required>
             </div>
 
             <div class="col-md-6">
                 <label>Hora:</label>
-                <input type="time" name="hora_evento" class="form-control" required>
+                <select name="hora_evento" class="form-control" required>
+                    <option value="">Seleccione una hora</option>
+                    @for ($hour = 0; $hour < 24; $hour++)
+                        @foreach ([0, 30] as $minute)
+                            @php
+                                $time24 = sprintf('%02d:%02d', $hour, $minute);
+                                $hour12 = $hour == 0 ? 12 : ($hour > 12 ? $hour - 12 : $hour);
+                                $ampm = $hour < 12 ? 'AM' : 'PM';
+                                $timeDisplay = sprintf('%d:%02d %s', $hour12, $minute, $ampm);
+                            @endphp
+                            <option value="{{ $time24 }}">{{ $timeDisplay }}</option>
+                        @endforeach
+                    @endfor
+                </select>
+            </div>
+        </div>
+        
+        <label>Lugar del Evento (Dirección):</label>
+        <div class="row" id="direccion-inputs">
+            <div class="col-md-4">
+                <label for="tipo_via">Tipo de Vía:</label>
+                <select name="tipo_via" id="tipo_via" class="form-control" required>
+                    <option value="Calle">Calle</option>
+                    <option value="Carrera">Carrera</option>
+                    <option value="Avenida">Avenida</option>
+                    <option value="Transversal">Transversal</option>
+                    <option value="Diagonal">Diagonal</option>
+                </select>
+            </div>
+            <div class="col-md-3">
+                <label for="num_via_principal">Número Vía:</label>
+                <input type="text" 
+                       id="num_via_principal"
+                       class="form-control" 
+                       placeholder="Ej: 45"
+                       data-validate="num-via"
+                       maxlength="5"
+                       required>
+            </div>
+            <div class="col-md-5">
+                <label for="placa_completa">Placa y Complemento:</label>
+                <input type="text" 
+                       id="placa_completa"
+                       class="form-control" 
+                       placeholder="Ej: # 10-20, Piso 3"
+                       data-validate="placa-complemento"
+                       maxlength="50"
+                       required>
             </div>
         </div>
 
-        <label>Lugar:</label>
-        <input type="text" name="lugar_evento" class="form-control" required>
-
+        <input type="hidden" 
+               name="lugar_evento" 
+               id="lugar_evento_hidden"
+               required>
         <label>Descripción:</label>
         <textarea name="descripcion_evento"
                   class="form-control"
+                  data-validate="descripcion"
+                  data-max="500"
                   rows="3"></textarea>
 
-        <label>Tipo de evento (descripción del usuario):</label>
+        <label>Tipo de evento:</label>
         <input type="text"
                name="tipo_evento_usuario"
                class="form-control"
+               data-validate="tipo-evento"
+               maxlength="50"
                placeholder="Ej: Cumpleaños, Boda, Conferencia">
 
         <div style="text-align:center; margin-top:25px;">
