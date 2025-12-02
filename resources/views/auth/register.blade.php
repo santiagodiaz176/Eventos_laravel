@@ -2,6 +2,7 @@
 
 @section('title', 'Registro')
 
+
 {{-- ESTILOS --}}
 @section('styles')
     <link rel="stylesheet" href="{{ asset('vendor/bootstrap/css/bootstrap.min.css') }}">
@@ -14,10 +15,32 @@
     <link rel="stylesheet" href="{{ asset('vendor/daterangepicker/daterangepicker.css') }}">
     <link rel="stylesheet" href="{{ asset('css1/util.css') }}">
     <link rel="stylesheet" href="{{ asset('css1/main.css') }}">
+    
+    <style>
+        .password-toggle-icon {
+            position: absolute;
+            right: 20px;
+            top: 50%;
+            transform: translateY(-50%);
+            cursor: pointer;
+            z-index: 10;
+            color: #999;
+            font-size: 18px;
+            transition: color 0.3s;
+        }
+        
+        .password-toggle-icon:hover {
+            color: #333;
+        }
+        
+        .wrap-input100 {
+            position: relative;
+        }
+    </style>
 @endsection
 
 {{-- CONTENIDO --}}
-    @section('content')
+@section('content')
     <div class="limiter">
         <div class="container-login100" style="background-image:url('{{ asset('images1/01.jpg') }}');">
 
@@ -89,6 +112,9 @@
                 <input class="input100" type="password" id="password" name="password"
                     placeholder="Introduce tu contraseña">
                 <span class="focus-input100" data-symbol="&#xf190;"></span>
+                
+                {{-- Icono para mostrar/ocultar contraseña --}}
+                <i class="fa fa-eye-slash password-toggle-icon" id="togglePassword" onclick="togglePasswordVisibility('password', 'togglePassword')"></i>
 
                 <div class="error" id="errorPassword"></div>
 
@@ -104,6 +130,9 @@
                 <input class="input100" type="password" id="password_confirmation" 
                        name="password_confirmation" placeholder="Confirma tu contraseña">
                 <span class="focus-input100" data-symbol="&#xf190;"></span>
+                
+                {{-- Icono para mostrar/ocultar confirmación de contraseña --}}
+                <i class="fa fa-eye-slash password-toggle-icon" id="togglePasswordConfirmation" onclick="togglePasswordVisibility('password_confirmation', 'togglePasswordConfirmation')"></i>
 
                 <div class="error" id="errorConfirmacion"></div>
 
@@ -151,6 +180,25 @@
     <script src="{{ asset('vendor/jquery/jquery-3.2.1.min.js') }}"></script>
     <script src="{{ asset('vendor/bootstrap/js/bootstrap.min.js') }}"></script>
     <script src="{{ asset('vendor/animsition/js/animsition.min.js') }}"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+    {{-- Script para mostrar/ocultar contraseña --}}
+    <script>
+        function togglePasswordVisibility(inputId, iconId) {
+            const input = document.getElementById(inputId);
+            const icon = document.getElementById(iconId);
+            
+            if (input.type === 'password') {
+                input.type = 'text';
+                icon.classList.remove('fa-eye-slash');
+                icon.classList.add('fa-eye');
+            } else {
+                input.type = 'password';
+                icon.classList.remove('fa-eye');
+                icon.classList.add('fa-eye-slash');
+            }
+        }
+    </script>
 
     {{-- VALIDACIÓN REGISTRO --}}
     <script src="{{ asset('js/validacionRegistro.js') }}"></script>

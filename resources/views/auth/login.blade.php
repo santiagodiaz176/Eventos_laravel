@@ -14,6 +14,28 @@
     <link rel="stylesheet" href="{{ asset('vendor/daterangepicker/daterangepicker.css') }}">
     <link rel="stylesheet" href="{{ asset('css1/util.css') }}">
     <link rel="stylesheet" href="{{ asset('css1/main.css') }}">
+    
+    <style>
+        .password-toggle-icon {
+            position: absolute;
+            right: 20px;
+            top: 50%;
+            transform: translateY(-50%);
+            cursor: pointer;
+            z-index: 10;
+            color: #999;
+            font-size: 18px;
+            transition: color 0.3s;
+        }
+        
+        .password-toggle-icon:hover {
+            color: #333;
+        }
+        
+        .wrap-input100 {
+            position: relative;
+        }
+    </style>
 @endsection
 
 {{-- CONTENIDO --}}
@@ -41,12 +63,16 @@
                     <span class="label-input100">Contraseña</span>
                     <input class="input100" type="password" name="clave" id="password" placeholder="Introduce tu contraseña">
                     <span class="focus-input100" data-symbol="&#xf190;"></span>
+                    
+                    {{-- Icono para mostrar/ocultar contraseña --}}
+                    <i class="fa fa-eye-slash password-toggle-icon" id="togglePassword" onclick="togglePasswordVisibility('password', 'togglePassword')"></i>
+                    
                     <div class="error" id="errorPassword"></div>
                 </div>
 
                 <div class="text-right p-t-8 p-b-31">
-    <a href="{{ route('password.request') }}">¿Olvidaste tu contraseña?</a>
-</div>
+                    <a href="{{ route('password.request') }}">¿Olvidaste tu contraseña?</a>
+                </div>
 
                 <div class="container-login100-form-btn">
                     <div class="wrap-login100-form-btn">
@@ -87,6 +113,24 @@
     <script src="{{ asset('vendor/select2/select2.min.js') }}"></script>
     <script src="{{ asset('vendor/daterangepicker/moment.min.js') }}"></script>
     <script src="{{ asset('vendor/daterangepicker/daterangepicker.js') }}"></script>
+
+    {{-- Script para mostrar/ocultar contraseña --}}
+    <script>
+        function togglePasswordVisibility(inputId, iconId) {
+            const input = document.getElementById(inputId);
+            const icon = document.getElementById(iconId);
+            
+            if (input.type === 'password') {
+                input.type = 'text';
+                icon.classList.remove('fa-eye-slash');
+                icon.classList.add('fa-eye');
+            } else {
+                input.type = 'password';
+                icon.classList.remove('fa-eye');
+                icon.classList.add('fa-eye-slash');
+            }
+        }
+    </script>
 
     {{-- VALIDACIÓN LOGIN --}}
     <script src="{{ asset('js/validacionLogin.js') }}"></script>
