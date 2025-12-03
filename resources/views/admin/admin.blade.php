@@ -316,12 +316,12 @@
                 </td>
                 <td>
                     @if($servicios)
-                        <a href="{{ route('admin.servicios.editar', $servicios->id_servicio_contratado) }}"
-                           class="btn btn-warning btn-sm">
-                            <i class="fas fa-edit"></i> Editar
-                        </a>
-                        
                         @if($servicios->estado === 'borrador')
+                            <a href="{{ route('admin.servicios.editar', $servicios->id_servicio_contratado) }}"
+                               class="btn btn-warning btn-sm">
+                                <i class="fas fa-edit"></i> Editar
+                            </a>
+                            
                             <form action="{{ route('admin.servicios.enviar', $servicios->id_servicio_contratado) }}"
                                   method="POST"
                                   style="display:inline;">
@@ -331,6 +331,14 @@
                                     <i class="fas fa-paper-plane"></i> Enviar
                                 </button>
                             </form>
+                        @elseif($servicios->estado === 'enviado')
+                            <span class="badge badge-info">
+                                <i class="fas fa-check-circle"></i> Enviado al cliente
+                            </span>
+                        @elseif($servicios->estado === 'aprobado')
+                            <span class="badge badge-success">
+                                <i class="fas fa-check-double"></i> Aprobado por el cliente
+                            </span>
                         @endif
                     @else
                         <a href="{{ route('admin.servicios.crear', $cita->id_cita) }}"

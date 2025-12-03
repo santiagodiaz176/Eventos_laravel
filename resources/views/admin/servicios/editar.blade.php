@@ -1,12 +1,222 @@
-
 @extends('layouts.app')
 
 @section('title', 'Editar Servicios')
 
-{{-- Incluir los mismos estilos que crear.blade.php --}}
 @section('styles')
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-@include('admin.servicios.partials.estilos')
+<style>
+body {
+    font-family: Arial, sans-serif;
+    background: #f5f5f5;
+}
+
+.servicios-container {
+    max-width: 1000px;
+    margin: 30px auto;
+    background: #ffffff;
+    padding: 30px;
+    border-radius: 16px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+}
+
+.servicios-header {
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+.servicios-header h2 {
+    color: #2c3e50;
+    font-size: 28px;
+    margin-bottom: 10px;
+}
+
+.info-evento {
+    background: #e8f4fd;
+    padding: 15px;
+    border-radius: 10px;
+    margin-bottom: 25px;
+}
+
+.info-evento p {
+    margin: 5px 0;
+    color: #34495e;
+}
+
+.servicio-section {
+    margin-bottom: 30px;
+    border: 1px solid #e0e0e0;
+    border-radius: 10px;
+    padding: 20px;
+}
+
+.servicio-section h3 {
+    color: #2c3e50;
+    margin-bottom: 15px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.servicio-checkbox {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 15px;
+    padding: 12px;
+    background: #f8f9fa;
+    border-radius: 8px;
+}
+
+.servicio-checkbox input[type="checkbox"] {
+    width: 20px;
+    height: 20px;
+    cursor: pointer;
+}
+
+.servicio-checkbox label {
+    font-weight: 600;
+    cursor: pointer;
+    margin: 0;
+}
+
+.servicio-detalle {
+    display: none;
+    margin-top: 15px;
+    padding: 15px;
+    background: #fff;
+    border: 2px solid #3498db;
+    border-radius: 8px;
+}
+
+.servicio-detalle.active {
+    display: block;
+}
+
+.item-seleccion {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px;
+    background: #f8f9fa;
+    border-radius: 6px;
+    margin-bottom: 8px;
+}
+
+.item-seleccion input[type="checkbox"],
+.item-seleccion input[type="radio"] {
+    width: 18px;
+    height: 18px;
+}
+
+.item-seleccion label {
+    flex: 1;
+    margin: 0;
+}
+
+.precio-item {
+    font-weight: 700;
+    color: #27ae60;
+}
+
+.alert-info {
+    background: #e3f2fd;
+    padding: 12px;
+    border-radius: 8px;
+    margin-bottom: 15px;
+}
+
+.text-muted {
+    color: #6c757d;
+    font-size: 0.9em;
+}
+
+.badge {
+    display: inline-block;
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-size: 12px;
+    font-weight: 600;
+}
+
+.badge-warning {
+    background: #ffc107;
+    color: #000;
+}
+
+.badge-info {
+    background: #17a2b8;
+    color: #fff;
+}
+
+.badge-success {
+    background: #28a745;
+    color: #fff;
+}
+
+.resumen-total {
+    background: #34495e;
+    color: white;
+    padding: 20px;
+    border-radius: 10px;
+    margin-top: 30px;
+}
+
+.resumen-total h3 {
+    margin-top: 0;
+    color: white;
+}
+
+.resumen-linea {
+    display: flex;
+    justify-content: space-between;
+    margin: 10px 0;
+    font-size: 16px;
+}
+
+.resumen-total-final {
+    font-size: 24px;
+    font-weight: 700;
+    border-top: 2px solid #fff;
+    padding-top: 15px;
+    margin-top: 15px;
+}
+
+.btn-group {
+    display: flex;
+    gap: 15px;
+    justify-content: center;
+    margin-top: 25px;
+}
+
+.btn {
+    padding: 12px 30px;
+    border-radius: 8px;
+    font-weight: 600;
+    border: none;
+    cursor: pointer;
+    text-decoration: none;
+    display: inline-block;
+    transition: all 0.3s;
+}
+
+.btn-success {
+    background: #27ae60;
+    color: #fff;
+}
+
+.btn-success:hover {
+    background: #229954;
+}
+
+.btn-secondary {
+    background: #95a5a6;
+    color: #fff;
+}
+
+.btn-secondary:hover {
+    background: #7f8c8d;
+}
+</style>
 @endsection
 
 @section('content')
@@ -121,6 +331,10 @@
             </div>
 
             <div class="servicio-detalle {{ $servicio->comidas->count() > 0 ? 'active' : '' }}" id="detalle-comida">
+                <div class="alert-info" style="background: #e3f2fd; padding: 12px; border-radius: 8px; margin-bottom: 15px;">
+                    <strong><i class="fas fa-info-circle"></i> Información:</strong> 
+                    Los platos seleccionados se multiplicarán automáticamente por {{ $cita->evento->cantidad_personas }} personas.
+                </div>
                 <p><strong>Seleccione hasta 3 platos:</strong></p>
                 
                 <h4 style="margin-top:15px;">Entradas</h4>
@@ -128,12 +342,14 @@
                     <div class="item-seleccion">
                         <input type="checkbox" name="comidas[]" value="{{ $comida->id_comida }}"
                                class="comida-check"
+                               data-precio="{{ $comida->precio }}"
                                {{ $servicio->comidas->contains($comida->id_comida) ? 'checked' : '' }}>
                         <label>
                             <strong>{{ $comida->nombre_comida }}</strong><br>
-                            <small>{{ $comida->descripcion }}</small>
+                            <small>{{ $comida->descripcion }}</small><br>
+                            <small class="text-muted">Precio unitario: ${{ number_format($comida->precio, 0, ',', '.') }}</small>
                         </label>
-                        <span class="precio-item">${{ number_format($comida->precio, 0, ',', '.') }}</span>
+                        <span class="precio-item">${{ number_format($comida->precio * $cita->evento->cantidad_personas, 0, ',', '.') }}</span>
                     </div>
                 @endforeach
 
@@ -142,12 +358,14 @@
                     <div class="item-seleccion">
                         <input type="checkbox" name="comidas[]" value="{{ $comida->id_comida }}"
                                class="comida-check"
+                               data-precio="{{ $comida->precio }}"
                                {{ $servicio->comidas->contains($comida->id_comida) ? 'checked' : '' }}>
                         <label>
                             <strong>{{ $comida->nombre_comida }}</strong><br>
-                            <small>{{ $comida->descripcion }}</small>
+                            <small>{{ $comida->descripcion }}</small><br>
+                            <small class="text-muted">Precio unitario: ${{ number_format($comida->precio, 0, ',', '.') }}</small>
                         </label>
-                        <span class="precio-item">${{ number_format($comida->precio, 0, ',', '.') }}</span>
+                        <span class="precio-item">${{ number_format($comida->precio * $cita->evento->cantidad_personas, 0, ',', '.') }}</span>
                     </div>
                 @endforeach
 
@@ -156,12 +374,14 @@
                     <div class="item-seleccion">
                         <input type="checkbox" name="comidas[]" value="{{ $comida->id_comida }}"
                                class="comida-check"
+                               data-precio="{{ $comida->precio }}"
                                {{ $servicio->comidas->contains($comida->id_comida) ? 'checked' : '' }}>
                         <label>
                             <strong>{{ $comida->nombre_comida }}</strong><br>
-                            <small>{{ $comida->descripcion }}</small>
+                            <small>{{ $comida->descripcion }}</small><br>
+                            <small class="text-muted">Precio unitario: ${{ number_format($comida->precio, 0, ',', '.') }}</small>
                         </label>
-                        <span class="precio-item">${{ number_format($comida->precio, 0, ',', '.') }}</span>
+                        <span class="precio-item">${{ number_format($comida->precio * $cita->evento->cantidad_personas, 0, ',', '.') }}</span>
                     </div>
                 @endforeach
             </div>
@@ -177,19 +397,47 @@
             </div>
 
             <div class="servicio-detalle {{ $servicio->bebidas->count() > 0 ? 'active' : '' }}" id="detalle-bebidas">
-                <p><strong>Seleccione las bebidas deseadas:</strong></p>
+                <div class="alert-info" style="background: #fff3cd; padding: 12px; border-radius: 8px; margin-bottom: 15px;">
+                    <strong><i class="fas fa-info-circle"></i> Información:</strong> 
+                    Seleccione la cantidad de bebidas por persona ({{ $cita->evento->cantidad_personas }} invitados).
+                </div>
+                <p><strong>Seleccione las bebidas y cantidad por persona:</strong></p>
                 
                 @foreach($bebidas->groupBy('tipo') as $tipo => $bebidasTipo)
                     <h4 style="margin-top:15px;text-transform:capitalize;">{{ $tipo }}</h4>
                     @foreach($bebidasTipo as $bebida)
-                        <div class="item-seleccion">
-                            <input type="checkbox" name="bebidas[]" value="{{ $bebida->id_bebida }}"
+                        @php
+                            $bebidaSeleccionada = $servicio->bebidas->find($bebida->id_bebida);
+                            $cantidadPorPersona = $bebidaSeleccionada ? round($bebidaSeleccionada->pivot->cantidad / $cita->evento->cantidad_personas) : 1;
+                        @endphp
+                        <div class="item-seleccion bebida-item">
+                            <input type="checkbox" 
+                                   name="bebidas[{{ $bebida->id_bebida }}][selected]" 
+                                   value="1"
+                                   class="bebida-check"
+                                   data-bebida-id="{{ $bebida->id_bebida }}"
+                                   data-precio="{{ $bebida->precio }}"
                                    {{ $servicio->bebidas->contains($bebida->id_bebida) ? 'checked' : '' }}>
-                            <label>
+                            <label style="flex: 1;">
                                 <strong>{{ $bebida->nombre_bebida }}</strong><br>
-                                <small>{{ $bebida->descripcion }}</small>
+                                <small>{{ $bebida->descripcion }}</small><br>
+                                <small class="text-muted">Precio unitario: ${{ number_format($bebida->precio, 0, ',', '.') }}</small>
                             </label>
-                            <span class="precio-item">${{ number_format($bebida->precio, 0, ',', '.') }}</span>
+                            <div style="display: flex; align-items: center; gap: 10px;">
+                                <input type="number" 
+                                       name="bebidas[{{ $bebida->id_bebida }}][cantidad_por_persona]" 
+                                       class="cantidad-bebida"
+                                       data-bebida-id="{{ $bebida->id_bebida }}"
+                                       min="1" 
+                                       max="10" 
+                                       value="{{ $cantidadPorPersona }}"
+                                       style="width: 60px; padding: 5px; border: 1px solid #ccc; border-radius: 4px;"
+                                       placeholder="Cant">
+                                <span class="text-muted" style="font-size: 12px;">por persona</span>
+                                <span class="precio-item bebida-precio-{{ $bebida->id_bebida }}">
+                                    ${{ number_format($bebida->precio * $cantidadPorPersona * $cita->evento->cantidad_personas, 0, ',', '.') }}
+                                </span>
+                            </div>
                         </div>
                     @endforeach
                 @endforeach
@@ -225,11 +473,10 @@
 
 </div>
 @endsection
-
 @section('scripts')
-{{-- Incluir el mismo script de crear.blade.php --}}
 <script>
 document.addEventListener('DOMContentLoaded', function() {
+    const cantidadPersonas = {{ $cita->evento->cantidad_personas }};
     
     // Toggle detalles de servicios
     const checkboxes = [
@@ -269,6 +516,25 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     });
 
+    // Manejar cambios en cantidad de bebidas
+    document.querySelectorAll('.cantidad-bebida').forEach(input => {
+        input.addEventListener('input', function() {
+            const bebidaId = this.dataset.bebidaId;
+            const checkbox = document.querySelector(`.bebida-check[data-bebida-id="${bebidaId}"]`);
+            const cantidad = parseInt(this.value) || 1;
+            const precioUnitario = parseFloat(checkbox.dataset.precio);
+            
+            // Actualizar precio total de esta bebida
+            const precioTotal = precioUnitario * cantidad * cantidadPersonas;
+            const precioSpan = document.querySelector(`.bebida-precio-${bebidaId}`);
+            if (precioSpan) {
+                precioSpan.textContent = '$' + precioTotal.toLocaleString('es-CO');
+            }
+            
+            calcularTotal();
+        });
+    });
+
     // Calcular total
     function calcularTotal() {
         let subtotal = 0;
@@ -289,14 +555,19 @@ document.addEventListener('DOMContentLoaded', function() {
             subtotal += parseInt(precio.replace(/\D/g, ''));
         }
 
+        // Comidas (multiplicadas por cantidad de personas)
         document.querySelectorAll('input[name="comidas[]"]:checked').forEach(check => {
-            const precio = check.closest('.item-seleccion').querySelector('.precio-item').textContent;
-            subtotal += parseInt(precio.replace(/\D/g, ''));
+            const precioUnitario = parseFloat(check.dataset.precio);
+            subtotal += precioUnitario * cantidadPersonas;
         });
 
-        document.querySelectorAll('input[name="bebidas[]"]:checked').forEach(check => {
-            const precio = check.closest('.item-seleccion').querySelector('.precio-item').textContent;
-            subtotal += parseInt(precio.replace(/\D/g, ''));
+        // Bebidas (con cantidad por persona)
+        document.querySelectorAll('.bebida-check:checked').forEach(check => {
+            const bebidaId = check.dataset.bebidaId;
+            const cantidadInput = document.querySelector(`.cantidad-bebida[data-bebida-id="${bebidaId}"]`);
+            const cantidad = parseInt(cantidadInput.value) || 1;
+            const precioUnitario = parseFloat(check.dataset.precio);
+            subtotal += precioUnitario * cantidad * cantidadPersonas;
         });
 
         const iva = subtotal * 0.19;

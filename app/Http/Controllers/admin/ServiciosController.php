@@ -6,6 +6,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Cita;
+use App\Models\Evento;
 use App\Models\ServicioContratado;
 use App\Models\Comida;
 use App\Models\Bebida;
@@ -51,8 +52,11 @@ class ServiciosController extends Controller
             'comidas' => 'nullable|array|max:3',
             'comidas.*' => 'exists:comidas,id_comida',
             'bebidas' => 'nullable|array',
-            'bebidas.*' => 'exists:bebidas,id_bebida',
         ]);
+
+        // Obtener evento para cantidad de personas
+        $evento = Evento::findOrFail($request->id_evento);
+        $cantidadPersonas = $evento->cantidad_personas;
 
         // Calcular totales
         $subtotal = 0;
@@ -74,19 +78,22 @@ class ServiciosController extends Controller
             $subtotal += $decoracion->precio;
         }
 
-        // Comidas
+        // Comidas (multiplicadas por cantidad de personas)
         if ($request->comidas) {
             $comidas = Comida::whereIn('id_comida', $request->comidas)->get();
             foreach ($comidas as $comida) {
-                $subtotal += $comida->precio;
+                $subtotal += $comida->precio * $cantidadPersonas;
             }
         }
 
-        // Bebidas
+        // Bebidas (con cantidad por persona)
         if ($request->bebidas) {
-            $bebidas = Bebida::whereIn('id_bebida', $request->bebidas)->get();
-            foreach ($bebidas as $bebida) {
-                $subtotal += $bebida->precio;
+            foreach ($request->bebidas as $id_bebida => $datos) {
+                if (isset($datos['selected']) && $datos['selected']) {
+                    $bebida = Bebida::find($id_bebida);
+                    $cantidadPorPersona = $datos['cantidad_por_persona'] ?? 1;
+                    $subtotal += $bebida->precio * $cantidadPorPersona * $cantidadPersonas;
+                }
             }
         }
 
@@ -108,27 +115,32 @@ class ServiciosController extends Controller
             'estado' => 'borrador',
         ]);
 
-        // Asociar comidas
+        // Asociar comidas (con cantidad = número de personas)
         if ($request->comidas) {
             foreach ($request->comidas as $id_comida) {
                 $comida = Comida::find($id_comida);
                 $servicio->comidas()->attach($id_comida, [
-                    'cantidad' => 1,
+                    'cantidad' => $cantidadPersonas,
                     'precio_unitario' => $comida->precio,
-                    'subtotal' => $comida->precio,
+                    'subtotal' => $comida->precio * $cantidadPersonas,
                 ]);
             }
         }
 
-        // Asociar bebidas
+        // Asociar bebidas (con cantidad por persona)
         if ($request->bebidas) {
-            foreach ($request->bebidas as $id_bebida) {
-                $bebida = Bebida::find($id_bebida);
-                $servicio->bebidas()->attach($id_bebida, [
-                    'cantidad' => 1,
-                    'precio_unitario' => $bebida->precio,
-                    'subtotal' => $bebida->precio,
-                ]);
+            foreach ($request->bebidas as $id_bebida => $datos) {
+                if (isset($datos['selected']) && $datos['selected']) {
+                    $bebida = Bebida::find($id_bebida);
+                    $cantidadPorPersona = $datos['cantidad_por_persona'] ?? 1;
+                    $cantidadTotal = $cantidadPorPersona * $cantidadPersonas;
+                    
+                    $servicio->bebidas()->attach($id_bebida, [
+                        'cantidad' => $cantidadTotal,
+                        'precio_unitario' => $bebida->precio,
+                        'subtotal' => $bebida->precio * $cantidadTotal,
+                    ]);
+                }
             }
         }
 
@@ -175,8 +187,11 @@ class ServiciosController extends Controller
             'comidas' => 'nullable|array|max:3',
             'comidas.*' => 'exists:comidas,id_comida',
             'bebidas' => 'nullable|array',
-            'bebidas.*' => 'exists:bebidas,id_bebida',
         ]);
+
+        // Obtener evento para cantidad de personas
+        $evento = $servicio->evento;
+        $cantidadPersonas = $evento->cantidad_personas;
 
         // Recalcular totales
         $subtotal = 0;
@@ -195,31 +210,36 @@ class ServiciosController extends Controller
             $subtotal += $decoracion->precio;
         }
 
-        // Actualizar comidas
+        // Actualizar comidas (multiplicadas por cantidad de personas)
         $servicio->comidas()->detach();
         if ($request->comidas) {
             foreach ($request->comidas as $id_comida) {
                 $comida = Comida::find($id_comida);
-                $subtotal += $comida->precio;
+                $subtotal += $comida->precio * $cantidadPersonas;
                 $servicio->comidas()->attach($id_comida, [
-                    'cantidad' => 1,
+                    'cantidad' => $cantidadPersonas,
                     'precio_unitario' => $comida->precio,
-                    'subtotal' => $comida->precio,
+                    'subtotal' => $comida->precio * $cantidadPersonas,
                 ]);
             }
         }
 
-        // Actualizar bebidas
+        // Actualizar bebidas (con cantidad por persona)
         $servicio->bebidas()->detach();
         if ($request->bebidas) {
-            foreach ($request->bebidas as $id_bebida) {
-                $bebida = Bebida::find($id_bebida);
-                $subtotal += $bebida->precio;
-                $servicio->bebidas()->attach($id_bebida, [
-                    'cantidad' => 1,
-                    'precio_unitario' => $bebida->precio,
-                    'subtotal' => $bebida->precio,
-                ]);
+            foreach ($request->bebidas as $id_bebida => $datos) {
+                if (isset($datos['selected']) && $datos['selected']) {
+                    $bebida = Bebida::find($id_bebida);
+                    $cantidadPorPersona = $datos['cantidad_por_persona'] ?? 1;
+                    $cantidadTotal = $cantidadPorPersona * $cantidadPersonas;
+                    $subtotal += $bebida->precio * $cantidadTotal;
+                    
+                    $servicio->bebidas()->attach($id_bebida, [
+                        'cantidad' => $cantidadTotal,
+                        'precio_unitario' => $bebida->precio,
+                        'subtotal' => $bebida->precio * $cantidadTotal,
+                    ]);
+                }
             }
         }
 
@@ -261,8 +281,3 @@ class ServiciosController extends Controller
 }
 
 
-
-// ==========================================
-// ACTUALIZAR: app/Http/Controllers/EventoController.php
-
-// En el método create():

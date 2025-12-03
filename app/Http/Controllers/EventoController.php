@@ -27,42 +27,42 @@ class EventoController extends Controller
     }
 
     // Formulario crear evento (incluye tipos y zonas)
-    public function create()
-    {
-        $tiposEvento = Tipoevento::all();
-        $zonas = Zona::where('activo', true)->get();
-
-        return view('user.create_evento', compact('tiposEvento', 'zonas'));
-    }
+public function create()
+{
+    $tiposEvento = \App\Models\TipoEvento::all();
+    $zonas = \App\Models\Zona::where('activo', true)->get();
+    
+    return view('user.create_evento', compact('tiposEvento', 'zonas'));
+}
 
     // Guardar evento (USUARIO)
-    public function store(Request $request)
-    {
-        $validated = $request->validate([
-            'nombre_evento'      => 'required|string|max:30',
-            'id_tipoevento'      => 'required|exists:tipoevento,id_tipoevento',
-            'cantidad_personas'  => 'required|integer|min:1',
-            'id_zona'            => 'required|exists:zonas,id_zona',
-            'fecha_evento'       => 'required|date|after:today',
-            'hora_evento'        => 'required',
-            'descripcion_evento' => 'nullable|string|max:500',
-        ]);
+   public function store(Request $request)
+{
+    $validated = $request->validate([
+        'nombre_evento' => 'required|string|max:30',
+        'id_tipoevento' => 'required|exists:tipoevento,id_tipoevento',
+        'cantidad_personas' => 'required|integer|min:1',
+        'id_zona' => 'required|exists:zonas,id_zona',
+        'fecha_evento' => 'required|date|after:today',
+        'hora_evento' => 'required',
+        'descripcion_evento' => 'nullable|string|max:500',
+    ]);
 
-        $evento = Evento::create([
-            'nombre_evento'      => $request->nombre_evento,
-            'id_tipoevento'      => $request->id_tipoevento,
-            'cantidad_personas'  => $request->cantidad_personas,
-            'id_zona'            => $request->id_zona,
-            'fecha_evento'       => $request->fecha_evento,
-            'hora_evento'        => $request->hora_evento,
-            'descripcion_evento' => $request->descripcion_evento,
-            'id_usuario'         => auth()->id(),
-            'id_estado'          => 1, // Pendiente
-        ]);
+    $evento = Evento::create([
+        'nombre_evento' => $request->nombre_evento,
+        'id_tipoevento' => $request->id_tipoevento,
+        'cantidad_personas' => $request->cantidad_personas,
+        'id_zona' => $request->id_zona,
+        'fecha_evento' => $request->fecha_evento,
+        'hora_evento' => $request->hora_evento,
+        'descripcion_evento' => $request->descripcion_evento,
+        'id_usuario' => auth()->id(),
+        'id_estado' => 1, // Pendiente
+    ]);
 
-        return redirect()->route('eventos.index')
-            ->with('success', 'Evento creado exitosamente');
-    }
+    return redirect()->route('eventos.index')
+        ->with('success', 'Evento creado exitosamente');
+}
 
     /*
     |------------------------------------------|

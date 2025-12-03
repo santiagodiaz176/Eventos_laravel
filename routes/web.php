@@ -83,22 +83,25 @@ Route::prefix('admin')->middleware(['auth', 'admin'])->group(function () {
     Route::delete('/usuarios/{id}', [UsuarioController::class, 'destroy'])->name('usuarios.destroy');
 
      // SERVICIOS
-   Route::prefix('admin/servicios')->name('admin.servicios.')->group(function () {
-        Route::get('/crear/{id_cita}', [App\Http\Controllers\Admin\ServiciosController::class, 'crear'])
-            ->name('crear');
-        
-        Route::post('/store', [App\Http\Controllers\Admin\ServiciosController::class, 'store'])
-            ->name('store');
-        
-        Route::get('/editar/{id_servicio_contratado}', [App\Http\Controllers\Admin\ServiciosController::class, 'editar'])
-            ->name('editar');
-        
-        Route::put('/update/{id_servicio_contratado}', [App\Http\Controllers\Admin\ServiciosController::class, 'update'])
-            ->name('update');
-        
-        Route::put('/enviar/{id_servicio_contratado}', [App\Http\Controllers\Admin\ServiciosController::class, 'enviar'])
-            ->name('enviar');
-    });
+   // SERVICIOS
+Route::prefix('servicios')->name('admin.servicios.')->group(function () {
+
+    Route::get('/crear/{id_cita}', [App\Http\Controllers\Admin\ServiciosController::class, 'crear'])
+        ->name('crear');
+    
+    Route::post('/store', [App\Http\Controllers\Admin\ServiciosController::class, 'store'])
+        ->name('store');
+    
+    Route::get('/editar/{id_servicio_contratado}', [App\Http\Controllers\Admin\ServiciosController::class, 'editar'])
+        ->name('editar');
+    
+    Route::put('/update/{id_servicio_contratado}', [App\Http\Controllers\Admin\ServiciosController::class, 'update'])
+        ->name('update');
+    
+    Route::put('/enviar/{id_servicio_contratado}', [App\Http\Controllers\Admin\ServiciosController::class, 'enviar'])
+        ->name('enviar');
+});
+
 
     // Citas CRUD
     Route::get('/citas', [CitaAdminController::class, 'index'])->name('admin.citas.index');

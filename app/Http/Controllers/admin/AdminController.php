@@ -10,7 +10,7 @@ use App\Models\Bebida;
 use App\Models\Salon;
 use App\Models\Decoracion;
 
-class AdminController extends Controller
+class AController extends Controller
 {
 public function index(Request $request)
 {
@@ -42,5 +42,6 @@ public function index(Request $request)
         'suscripcionesCount'
     ));
 }
+
 
 }

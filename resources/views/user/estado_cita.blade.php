@@ -114,8 +114,11 @@
                             <ul class="servicios-lista">
                                 @foreach($servicios->comidas as $comida)
                                     <li>
-                                        <span>{{ $comida->nombre_comida }}</span>
-                                        <span class="precio">${{ number_format($comida->precio, 0, ',', '.') }}</span>
+                                        <span>
+                                            {{ $comida->nombre_comida }}<br>
+                                            <small class="text-muted">{{ $comida->pivot->cantidad }} unidades × ${{ number_format($comida->pivot->precio_unitario, 0, ',', '.') }}</small>
+                                        </span>
+                                        <span class="precio">${{ number_format($comida->pivot->subtotal, 0, ',', '.') }}</span>
                                     </li>
                                 @endforeach
                             </ul>
@@ -129,8 +132,11 @@
                             <ul class="servicios-lista">
                                 @foreach($servicios->bebidas as $bebida)
                                     <li>
-                                        <span>{{ $bebida->nombre_bebida }}</span>
-                                        <span class="precio">${{ number_format($bebida->precio, 0, ',', '.') }}</span>
+                                        <span>
+                                            {{ $bebida->nombre_bebida }}<br>
+                                            <small class="text-muted">{{ $bebida->pivot->cantidad }} unidades × ${{ number_format($bebida->pivot->precio_unitario, 0, ',', '.') }}</small>
+                                        </span>
+                                        <span class="precio">${{ number_format($bebida->pivot->subtotal, 0, ',', '.') }}</span>
                                     </li>
                                 @endforeach
                             </ul>
