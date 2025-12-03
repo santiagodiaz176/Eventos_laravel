@@ -2,6 +2,7 @@
 
 @section('title', 'Estado de tu cita')
 
+
 @section('content')
 <div class="estado-container">
 

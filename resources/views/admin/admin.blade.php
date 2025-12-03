@@ -4,8 +4,11 @@
 
 @section('styles')
     {{-- Solo iconos, el CSS ya viene del layout --}}
+    <link rel="stylesheet" href="">
     <link rel="stylesheet"
           href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    {{-- SweetAlert2 CSS --}}
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
 @endsection
 
 @section('content')
@@ -83,11 +86,12 @@
                     </a>
 
                     <form action="{{ route('usuarios.destroy', $u->id_usuario) }}"
-                          method="POST" style="display:inline-block;"
-                          onsubmit="return confirm('¿Desea eliminar este usuario?')">
+                          method="POST" 
+                          style="display:inline-block;"
+                          class="form-eliminar-usuario">
                         @csrf
                         @method('DELETE')
-                        <button type="submit" class="btn btn-danger">
+                        <button type="button" class="btn btn-danger btn-eliminar-usuario">
                             <i class="fas fa-trash"></i>
                         </button>
                     </form>
@@ -296,6 +300,9 @@
 @endsection
 
 @section('scripts')
+{{-- SweetAlert2 JS --}}
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
 <script>
 function mostrarTab(id){
     document.querySelectorAll('.content').forEach(c => c.classList.remove('active'));
@@ -316,5 +323,49 @@ if(tab){
         tabBtn.classList.add('active');
     }
 }
+
+// Confirmación antes de eliminar usuario
+document.querySelectorAll('.btn-eliminar-usuario').forEach(btn => {
+    btn.addEventListener('click', function(e) {
+        e.preventDefault();
+        const form = this.closest('.form-eliminar-usuario');
+        
+        Swal.fire({
+            title: '¿Estás seguro?',
+            text: "Esta acción no se puede deshacer",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#d33',
+            cancelButtonColor: '#3085d6',
+            confirmButtonText: 'Sí, eliminar',
+            cancelButtonText: 'Cancelar'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                form.submit();
+            }
+        });
+    });
+});
+
+// Mostrar mensaje de éxito si viene de la sesión
+@if(session('success'))
+    Swal.fire({
+        icon: 'success',
+        title: '¡Éxito!',
+        text: '{{ session('success') }}',
+        timer: 3000,
+        showConfirmButton: false
+    });
+@endif
+
+// Mostrar mensaje de error si existe
+@if(session('error'))
+    Swal.fire({
+        icon: 'error',
+        title: 'Error',
+        text: '{{ session('error') }}',
+        confirmButtonColor: '#d33'
+    });
+@endif
 </script>
 @endsection

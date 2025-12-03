@@ -5,6 +5,8 @@
 @section('styles')
 <link rel="stylesheet" href="{{ asset('css/bootstrap.css') }}">
 <link rel="stylesheet" href="{{ asset('css/style.css') }}">
+
+<link rel="icon" href="{{ asset('images/WhatsApp Image 2025-10-21 at 15.54.34 (1).jpeg') }}">
 @endsection
 
 @section('content')

@@ -3,7 +3,14 @@
   @section('title', 'Dreams - Inicio')
 
   @section('styles')
+  <link rel="stylesheet" href="{{ asset('css/bootstrap.css') }}">
+<link rel="stylesheet" href="{{ asset('css/style.css') }}">
+
+<link rel="icon" href="{{ asset('images/WhatsApp Image 2025-10-21 at 15.54.34 (1).jpeg') }}">
   <style>
+    .icon{
+      border-radius: 50px;
+    }
       .ie-panel{display: none;background: #212121;padding: 10px 0;box-shadow: 3px 3px 5px 0 rgba(0,0,0,.3);clear: both;text-align:center;position: relative;z-index: 1;}
       html.ie-10 .ie-panel, html.lt-ie-10 .ie-panel {display: block;}
       

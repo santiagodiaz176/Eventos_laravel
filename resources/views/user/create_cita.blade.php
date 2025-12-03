@@ -28,6 +28,16 @@
         padding: 10px;
         border: 1px solid #ccc;
     }
+    .form-card .form-control.is-invalid {
+        border-color: #dc3545;
+    }
+    .invalid-feedback {
+        display: block;
+        color: #dc3545;
+        font-size: 0.875rem;
+        margin-top: -10px;
+        margin-bottom: 10px;
+    }
     .form-card .button-primary {
         display: inline-block;
         background-color: #007bff;
@@ -66,13 +76,14 @@
         <div class="alert alert-success">{{ session('success') }}</div>
     @endif
 
-    <form action="{{ route('reserva.cita') }}" method="POST">
+    <form action="{{ route('reserva.cita') }}" method="POST" id="formCita">
         @csrf
 
         <div class="row">
             <div class="col-md-6">
                 <label>Nombre completo:</label>
-                <input type="text" name="nombre" class="form-control" placeholder="Ej: Santiago Díaz" required>
+                <input type="text" name="nombre" id="nombre" class="form-control" placeholder="Ej: Santiago Díaz" required>
+                <div class="invalid-feedback" id="nombreError"></div>
             </div>
             <div class="col-md-6">
                 <label>Teléfono:</label>
@@ -134,16 +145,105 @@
 document.addEventListener('DOMContentLoaded', function () {
     const fechaInput = document.querySelector('input[name="fecha_cita"]');
     const horaSelect = document.getElementById('hora_cita');
+    const nombreInput = document.getElementById('nombre');
+    const nombreError = document.getElementById('nombreError');
+    const formCita = document.getElementById('formCita');
 
+    // Validación del nombre en tiempo real
+    if (nombreInput) {
+        nombreInput.addEventListener('input', function (e) {
+            let valor = e.target.value;
+            
+            // Eliminar números
+            valor = valor.replace(/[0-9]/g, '');
+            
+            // Eliminar puntos y comas
+            valor = valor.replace(/[.,]/g, '');
+            
+            // Eliminar múltiples espacios consecutivos y dejar solo uno
+            valor = valor.replace(/\s+/g, ' ');
+            
+            // Actualizar el valor del input
+            e.target.value = valor;
+            
+            // Validar en tiempo real
+            validarNombre(valor);
+        });
+
+        // Validar al perder el foco
+        nombreInput.addEventListener('blur', function () {
+            validarNombre(this.value);
+        });
+    }
+
+    // Función de validación del nombre
+    function validarNombre(valor) {
+        // Limpiar espacios al inicio y final
+        valor = valor.trim();
+        
+        // Validar que no esté vacío
+        if (valor === '') {
+            mostrarError('El nombre es obligatorio');
+            return false;
+        }
+        
+        // Validar que tenga al menos 2 caracteres
+        if (valor.length < 2) {
+            mostrarError('El nombre debe tener al menos 2 caracteres');
+            return false;
+        }
+        
+        // Validar que solo contenga letras y espacios (sin números, puntos, comas)
+        const regex = /^[a-záéíóúñüA-ZÁÉÍÓÚÑÜ\s]+$/;
+        if (!regex.test(valor)) {
+            mostrarError('El nombre solo puede contener letras y espacios');
+            return false;
+        }
+        
+        // Validar que no tenga espacios al inicio o al final
+        if (valor !== nombreInput.value.trim()) {
+            mostrarError('No se permiten espacios al inicio o al final');
+            return false;
+        }
+        
+        // Si pasa todas las validaciones
+        limpiarError();
+        return true;
+    }
+
+    // Mostrar mensaje de error
+    function mostrarError(mensaje) {
+        nombreInput.classList.add('is-invalid');
+        nombreError.textContent = mensaje;
+    }
+
+    // Limpiar mensaje de error
+    function limpiarError() {
+        nombreInput.classList.remove('is-invalid');
+        nombreError.textContent = '';
+    }
+
+    // Validación al enviar el formulario
+    if (formCita) {
+        formCita.addEventListener('submit', function (e) {
+            const nombreValor = nombreInput.value.trim();
+            
+            if (!validarNombre(nombreValor)) {
+                e.preventDefault();
+                nombreInput.focus();
+                return false;
+            }
+        });
+    }
+
+    // Código existente para las horas
     if (!fechaInput || !horaSelect) return;
 
     fechaInput.addEventListener('change', function () {
         const fecha = this.value;
 
-        // Resetear el valor del select ANTES de cambiar las opciones
         horaSelect.value = '';
 
-        // Validar que haya fecha
         if (!fecha) {
             horaSelect.innerHTML = '<option value="">Seleccione una fecha primero</option>';
             return;
@@ -151,7 +251,6 @@ document.addEventListener('DOMContentLoaded', function () {
 
         horaSelect.innerHTML = '<option value="">Cargando horas...</option>';
 
-        // Construir URL dinámicamente
         const url = '{{ route("citas.horas") }}' + '?fecha=' + encodeURIComponent(fecha);
 
         fetch(url, {
@@ -162,7 +261,6 @@ document.addEventListener('DOMContentLoaded', function () {
             return response.json();
         })
         .then(data => {
-            // Primero crear el HTML nuevo
             let opciones = '<option value="">Seleccione una hora</option>';
             
             if (!data || data.length === 0) {
@@ -173,7 +271,6 @@ document.addEventListener('DOMContentLoaded', function () {
                 });
             }
             
-            // Luego actualizar el innerHTML
             horaSelect.innerHTML = opciones;
         })
         .catch(err => {
