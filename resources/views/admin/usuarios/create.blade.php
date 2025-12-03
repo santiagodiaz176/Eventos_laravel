@@ -239,16 +239,74 @@ document.addEventListener('DOMContentLoaded', function() {
 
     const passwordStrength = document.getElementById('passwordStrength');
 
-    // Dominios de email permitidos
-    const dominiosPermitidos = [
-        'gmail.com',
-        'hotmail.com',
-        'outlook.com',
-        'yahoo.com',
-        'icloud.com',
-        'live.com',
-        'msn.com'
-    ];
+    // ============================================
+    // VALIDACIONES EN TIEMPO REAL
+    // ============================================
+    
+    // NOMBRE: Permite espacios entre palabras pero NO al inicio
+    fields.nombre.el.addEventListener('input', function() {
+        let valor = this.value;
+        
+        // Eliminar números y caracteres especiales
+        valor = valor.replace(/[^a-zA-ZáéíóúÁÉÍÓÚñÑüÜ\s]/g, '');
+        
+        // Eliminar espacios al inicio
+        valor = valor.replace(/^\s+/, '');
+        
+        // Reemplazar múltiples espacios consecutivos por uno solo
+        valor = valor.replace(/\s{2,}/g, ' ');
+        
+        this.value = valor;
+    });
+    
+    // APELLIDOS: Permite espacios entre palabras pero NO al inicio
+    fields.apellidos.el.addEventListener('input', function() {
+        let valor = this.value;
+        
+        // Eliminar números
+        valor = valor.replace(/[0-9]/g, '');
+        
+        // Eliminar espacios al inicio
+        valor = valor.replace(/^\s+/, '');
+        
+        // Reemplazar múltiples espacios consecutivos por uno solo
+        valor = valor.replace(/\s{2,}/g, ' ');
+        
+        this.value = valor;
+    });
+
+    // EMAIL: No permite espacios y debe terminar en .com
+    fields.email.el.addEventListener('input', function() {
+        // Elimina todos los espacios
+        this.value = this.value.replace(/\s+/g, '');
+    });
+
+    // Validar al pegar texto
+    fields.nombre.el.addEventListener('paste', function(e) {
+        setTimeout(() => {
+            let valor = this.value;
+            valor = valor.replace(/[^a-zA-ZáéíóúÁÉÍÓÚñÑüÜ\s]/g, '');
+            valor = valor.replace(/^\s+/, '');
+            valor = valor.replace(/\s{2,}/g, ' ');
+            this.value = valor;
+        }, 10);
+    });
+
+    fields.apellidos.el.addEventListener('paste', function(e) {
+        setTimeout(() => {
+            let valor = this.value;
+            valor = valor.replace(/[0-9]/g, '');
+            valor = valor.replace(/^\s+/, '');
+            valor = valor.replace(/\s{2,}/g, ' ');
+            this.value = valor;
+        }, 10);
+    });
+
+    fields.email.el.addEventListener('paste', function(e) {
+        setTimeout(() => {
+            this.value = this.value.replace(/\s+/g, '');
+        }, 10);
+    });
 
     function limpiarErrores() {
         Object.values(fields).forEach(f => {
@@ -260,34 +318,55 @@ document.addEventListener('DOMContentLoaded', function() {
 
     function validarNombre(nombre) {
         nombre = nombre.trim();
+        
         if (!nombre) {
             return { valido: false, mensaje: 'El nombre es obligatorio.' };
         }
         if (nombre.length < 2) {
             return { valido: false, mensaje: 'El nombre debe tener al menos 2 caracteres.' };
         }
-        if (!/^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s]+$/.test(nombre)) {
-            return { valido: false, mensaje: 'El nombre solo puede contener letras.' };
+        if (/^\s/.test(nombre)) {
+            return { valido: false, mensaje: 'El nombre no puede comenzar con espacio.' };
+        }
+        if (/\s{2,}/.test(nombre)) {
+            return { valido: false, mensaje: 'El nombre no puede tener espacios consecutivos.' };
+        }
+        if (nombre.endsWith(' ')) {
+            return { valido: false, mensaje: 'El nombre no puede terminar con espacio.' };
+        }
+        if (!/^[a-zA-ZáéíóúÁÉÍÓÚñÑüÜ]+(\s[a-zA-ZáéíóúÁÉÍÓÚñÑüÜ]+)*$/.test(nombre)) {
+            return { valido: false, mensaje: 'El nombre solo puede contener letras y espacios simples.' };
         }
         return { valido: true };
     }
 
     function validarApellidos(apellidos) {
         apellidos = apellidos.trim();
+        
         if (!apellidos) {
             return { valido: false, mensaje: 'Los apellidos son obligatorios.' };
         }
         if (apellidos.length < 2) {
             return { valido: false, mensaje: 'Los apellidos deben tener al menos 2 caracteres.' };
         }
-        if (!/^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s]+$/.test(apellidos)) {
-            return { valido: false, mensaje: 'Los apellidos solo pueden contener letras.' };
+        if (/^\s/.test(apellidos)) {
+            return { valido: false, mensaje: 'Los apellidos no pueden comenzar con espacio.' };
+        }
+        if (/\s{2,}/.test(apellidos)) {
+            return { valido: false, mensaje: 'Los apellidos no pueden tener espacios consecutivos.' };
+        }
+        if (apellidos.endsWith(' ')) {
+            return { valido: false, mensaje: 'Los apellidos no pueden terminar con espacio.' };
+        }
+        if (/[0-9]/.test(apellidos)) {
+            return { valido: false, mensaje: 'Los apellidos no pueden contener números.' };
         }
         return { valido: true };
     }
 
     function validarEmail(email) {
         email = email.trim();
+        
         if (!email) {
             return { valido: false, mensaje: 'El email es obligatorio.' };
         }
@@ -297,12 +376,20 @@ document.addEventListener('DOMContentLoaded', function() {
             return { valido: false, mensaje: 'Formato de email inválido.' };
         }
 
-        const dominio = email.split('@')[1].toLowerCase();
-        if (!dominiosPermitidos.includes(dominio)) {
-            return { 
-                valido: false, 
-                mensaje: `Solo se permiten emails de: ${dominiosPermitidos.join(', ')}.` 
-            };
+        // Validar que no contenga espacios
+        if (/\s/.test(email)) {
+            return { valido: false, mensaje: 'El email no puede contener espacios.' };
+        }
+
+        // Validar que termine EXACTAMENTE en .com (sin caracteres adicionales)
+        if (!email.endsWith('.com')) {
+            return { valido: false, mensaje: 'El email debe terminar en .com' };
+        }
+
+        // Validar que no haya nada después de .com
+        const regexComExacto = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.com$/;
+        if (!regexComExacto.test(email)) {
+            return { valido: false, mensaje: 'El email solo puede terminar en .com (sin caracteres adicionales).' };
         }
 
         return { valido: true };

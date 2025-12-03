@@ -15,6 +15,9 @@
     <link rel="stylesheet" href="{{ asset('css1/util.css') }}">
     <link rel="stylesheet" href="{{ asset('css1/main.css') }}">
     
+    {{-- SweetAlert2 CSS --}}
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
+    
     <style>
         .password-toggle-icon {
             position: absolute;
@@ -114,6 +117,9 @@
     <script src="{{ asset('vendor/daterangepicker/moment.min.js') }}"></script>
     <script src="{{ asset('vendor/daterangepicker/daterangepicker.js') }}"></script>
 
+    {{-- SweetAlert2 JS --}}
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
     {{-- Script para mostrar/ocultar contraseña --}}
     <script>
         function togglePasswordVisibility(inputId, iconId) {
@@ -131,6 +137,30 @@
             }
         }
     </script>
+
+    {{-- Mensajes de sesión con SweetAlert2 --}}
+    @if(session('error'))
+        <script>
+            Swal.fire({
+                icon: 'error',
+                title: 'Error',
+                text: '{{ session('error') }}',
+                confirmButtonColor: '#d33'
+            });
+        </script>
+    @endif
+
+    @if(session('success'))
+        <script>
+            Swal.fire({
+                icon: 'success',
+                title: '¡Éxito!',
+                text: '{{ session('success') }}',
+                timer: 3000,
+                showConfirmButton: false
+            });
+        </script>
+    @endif
 
     {{-- VALIDACIÓN LOGIN --}}
     <script src="{{ asset('js/validacionLogin.js') }}"></script>

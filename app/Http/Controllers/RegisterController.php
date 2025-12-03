@@ -19,7 +19,8 @@ class RegisterController extends Controller
                     'required',
                     'email',
                     'unique:usuarios,email',
-                    'regex:/^[a-zA-Z0-9._%+-]+@(gmail|hotmail)\.com$/'
+                    // Validación: debe terminar EXACTAMENTE en .com (sin caracteres adicionales)
+                    'regex:/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.com$/'
                 ],
                 'password' => [
                     'required',
@@ -35,21 +36,40 @@ class RegisterController extends Controller
                 'email.required' => 'El correo es obligatorio.',
                 'email.email' => 'El correo no es válido.',
                 'email.unique' => 'Este correo ya está registrado.',
-                'email.regex' => 'Solo se permiten correos @gmail.com o @hotmail.com.',
+                'email.regex' => 'El correo debe terminar en .com sin caracteres adicionales.',
                 'password.required' => 'La contraseña es obligatoria.',
                 'password.confirmed' => 'Las contraseñas no coinciden.',
                 'password.min' => 'La contraseña debe tener mínimo 8 caracteres.',
                 'password.regex' => 'La contraseña debe incluir mayúsculas, minúsculas y números.',
             ]);
 
+            // Limpiar el email (eliminar espacios y convertir a minúsculas)
+            $email = strtolower(trim(str_replace(' ', '', $validated['email'])));
+            
+            // Validación adicional: verificar que termine exactamente en .com
+            if (!str_ends_with($email, '.com')) {
+                return response()->json([
+                    'success' => false,
+                    'errors' => ['email' => ['El correo debe terminar en .com']]
+                ], 422);
+            }
+            
+            // Validar que no haya caracteres después de .com
+            if (!preg_match('/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.com$/', $email)) {
+                return response()->json([
+                    'success' => false,
+                    'errors' => ['email' => ['El correo solo puede terminar en .com (sin caracteres adicionales)']]
+                ], 422);
+            }
+
             // Generar nombre de usuario único basado en el email
-            $usuario = explode('@', $validated['email'])[0];
+            $usuario = explode('@', $email)[0];
 
             $usuarioCreado = Usuario::create([
                 'nombre' => $validated['nombre'],
                 'apellidos' => $validated['apellidos'],
-                'usuario' => $usuario,  // ← AGREGADO
-                'email' => $validated['email'],
+                'usuario' => $usuario,
+                'email' => $email,
                 'clave' => Hash::make($validated['password']),
             ]);
 

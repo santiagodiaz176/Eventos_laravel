@@ -34,12 +34,41 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 
+    // Función para validar que el correo termine en .com sin caracteres adicionales
+    function validarCorreoCom(email) {
+        // Eliminar espacios
+        email = email.replace(/\s+/g, '');
+        
+        // Validar que termine exactamente en .com
+        if (!email.endsWith('.com')) {
+            return {
+                valido: false,
+                mensaje: 'El correo debe terminar en .com'
+            };
+        }
+        
+        // Validar que no haya nada después de .com usando regex
+        const regexComExacto = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.com$/;
+        if (!regexComExacto.test(email)) {
+            return {
+                valido: false,
+                mensaje: 'El correo solo puede terminar en .com (sin caracteres adicionales)'
+            };
+        }
+        
+        return { valido: true, mensaje: '' };
+    }
+
     function validarCampos() {
         let valido = true;
         limpiarErrores();
 
-        const email = fields.email.el.value.trim();
+        let email = fields.email.el.value.trim();
         const password = fields.password.el.value;
+
+        // Eliminar espacios del email
+        email = email.replace(/\s+/g, '');
+        fields.email.el.value = email;
 
         // Validar email
         if (!email) {
@@ -47,11 +76,20 @@ document.addEventListener('DOMContentLoaded', function() {
             fields.email.err.style.display = 'block';
             valido = false;
         } else {
+            // Validar formato básico
             const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
             if (!emailRegex.test(email)) {
                 fields.email.err.textContent = 'Correo inválido.';
                 fields.email.err.style.display = 'block';
                 valido = false;
+            } else {
+                // Validar que termine en .com
+                const resultadoValidacion = validarCorreoCom(email);
+                if (!resultadoValidacion.valido) {
+                    fields.email.err.textContent = resultadoValidacion.mensaje;
+                    fields.email.err.style.display = 'block';
+                    valido = false;
+                }
             }
         }
 
@@ -69,9 +107,17 @@ document.addEventListener('DOMContentLoaded', function() {
         return valido;
     }
 
-    // Validación en tiempo real (opcional pero recomendado)
+    // Eliminar espacios en tiempo real del email
+    fields.email.el.addEventListener('input', function() {
+        this.value = this.value.replace(/\s+/g, '');
+    });
+
+    // Validación en tiempo real para email
     fields.email.el.addEventListener('blur', function() {
-        const email = this.value.trim();
+        let email = this.value.trim();
+        email = email.replace(/\s+/g, '');
+        this.value = email;
+        
         fields.email.err.style.display = 'none';
         
         if (email) {
@@ -79,10 +125,18 @@ document.addEventListener('DOMContentLoaded', function() {
             if (!emailRegex.test(email)) {
                 fields.email.err.textContent = 'Correo inválido.';
                 fields.email.err.style.display = 'block';
+            } else {
+                // Validar que termine en .com
+                const resultadoValidacion = validarCorreoCom(email);
+                if (!resultadoValidacion.valido) {
+                    fields.email.err.textContent = resultadoValidacion.mensaje;
+                    fields.email.err.style.display = 'block';
+                }
             }
         }
     });
 
+    // Validación en tiempo real para password
     fields.password.el.addEventListener('blur', function() {
         const password = this.value;
         fields.password.err.style.display = 'none';
@@ -93,11 +147,43 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
 
-    // Validación al enviar el formulario
+    // Validación al enviar el formulario con SweetAlert2
     form.addEventListener('submit', function(e) {
+        e.preventDefault(); // Prevenir envío por defecto
+        
         if (!validarCampos()) {
-            e.preventDefault();
+            // Determinar qué campo falló
+            let mensajeError = '';
+            let email = fields.email.el.value.trim().replace(/\s+/g, '');
+            
+            if (!email) {
+                mensajeError = 'Por favor, ingresa tu correo electrónico.';
+            } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+                mensajeError = 'El formato del correo es inválido.';
+            } else {
+                const resultadoValidacion = validarCorreoCom(email);
+                if (!resultadoValidacion.valido) {
+                    mensajeError = resultadoValidacion.mensaje;
+                } else if (!fields.password.el.value) {
+                    mensajeError = 'Por favor, ingresa tu contraseña.';
+                } else if (fields.password.el.value.length < 6) {
+                    mensajeError = 'La contraseña debe tener al menos 6 caracteres.';
+                }
+            }
+            
+            // Mostrar SweetAlert2 con el error
+            Swal.fire({
+                icon: 'error',
+                title: 'Error de validación',
+                text: mensajeError,
+                confirmButtonColor: '#d33',
+                confirmButtonText: 'Entendido'
+            });
+            
             console.log('Formulario no válido');
+        } else {
+            // Si todo es válido, enviar el formulario
+            form.submit();
         }
     });
 });
