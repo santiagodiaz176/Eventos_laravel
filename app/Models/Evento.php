@@ -58,4 +58,8 @@ class Evento extends Model
     {
         return $this->belongsTo(Usuario::class, 'id_usuario', 'id_usuario');
     }
+    public function zona()
+    {
+        return $this->belongsTo(Zona::class, 'id_zona', 'id_zona');
+    }
 }

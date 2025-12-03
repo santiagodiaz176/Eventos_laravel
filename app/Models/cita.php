@@ -46,4 +46,10 @@ class Cita extends Model
     {
         return $this->belongsTo(HorarioAtencion::class, 'id_horario', 'id_horario');
     }
+
+    public function serviciosContratados()
+    {
+    return $this->hasOne(ServicioContratado::class, 'id_cita', 'id_cita');
+    }
+
 }

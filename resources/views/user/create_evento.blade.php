@@ -21,12 +21,15 @@
     .form-card label {
         font-weight: 600;
         margin-top: 10px;
+        display: block;
     }
-    .form-card .form-control {
+    .form-card .form-control, 
+    .form-card select {
         margin-bottom: 15px;
         border-radius: 8px;
         padding: 10px;
         border: 1px solid #ccc;
+        width: 100%;
     }
     .button-primary {
         background-color: #007bff;
@@ -70,6 +73,20 @@
             </div>
 
             <div class="col-md-6">
+                <label>Tipo de evento:</label>
+                <select name="id_tipoevento" class="form-control" required>
+                    <option value="">Seleccione un tipo</option>
+                    @foreach($tiposEvento as $tipo)
+                        <option value="{{ $tipo->id_tipoevento }}">
+                            {{ $tipo->descripcion_tipoevento }}
+                        </option>
+                    @endforeach
+                </select>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-6">
                 <label>Cantidad de personas:</label>
                 <input type="number" 
                        name="cantidad_personas" 
@@ -77,6 +94,18 @@
                        data-validate="cantidad-personas"
                        min="1"
                        required>
+            </div>
+
+            <div class="col-md-6">
+                <label>Zona del evento:</label>
+                <select name="id_zona" class="form-control" required>
+                    <option value="">Seleccione una zona</option>
+                    @foreach($zonas as $zona)
+                        <option value="{{ $zona->id_zona }}">
+                            {{ $zona->nombre_zona }} - {{ $zona->descripcion }}
+                        </option>
+                    @endforeach
+                </select>
             </div>
         </div>
 
@@ -109,58 +138,12 @@
             </div>
         </div>
         
-        <label>Lugar del Evento (Dirección):</label>
-        <div class="row" id="direccion-inputs">
-            <div class="col-md-4">
-                <label for="tipo_via">Tipo de Vía:</label>
-                <select name="tipo_via" id="tipo_via" class="form-control" required>
-                    <option value="Calle">Calle</option>
-                    <option value="Carrera">Carrera</option>
-                    <option value="Avenida">Avenida</option>
-                    <option value="Transversal">Transversal</option>
-                    <option value="Diagonal">Diagonal</option>
-                </select>
-            </div>
-            <div class="col-md-3">
-                <label for="num_via_principal">Número Vía:</label>
-                <input type="text" 
-                       id="num_via_principal"
-                       class="form-control" 
-                       placeholder="Ej: 45"
-                       data-validate="num-via"
-                       maxlength="5"
-                       required>
-            </div>
-            <div class="col-md-5">
-                <label for="placa_completa">Placa y Complemento:</label>
-                <input type="text" 
-                       id="placa_completa"
-                       class="form-control" 
-                       placeholder="Ej: # 10-20, Piso 3"
-                       data-validate="placa-complemento"
-                       maxlength="50"
-                       required>
-            </div>
-        </div>
-
-        <input type="hidden" 
-               name="lugar_evento" 
-               id="lugar_evento_hidden"
-               required>
         <label>Descripción:</label>
         <textarea name="descripcion_evento"
                   class="form-control"
                   data-validate="descripcion"
                   data-max="500"
                   rows="3"></textarea>
-
-        <label>Tipo de evento:</label>
-        <input type="text"
-               name="tipo_evento_usuario"
-               class="form-control"
-               data-validate="tipo-evento"
-               maxlength="50"
-               placeholder="Ej: Cumpleaños, Boda, Conferencia">
 
         <div style="text-align:center; margin-top:25px;">
             <button type="submit" class="button-primary">

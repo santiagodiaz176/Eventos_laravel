@@ -9,12 +9,58 @@
           href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
     {{-- SweetAlert2 CSS --}}
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
+    <style>
+        .logo-container {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        .logo-icon {
+            width: 50px;
+            height: 50px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 24px;
+            font-weight: bold;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+        .logo-text {
+            display: flex;
+            flex-direction: column;
+        }
+        .logo-title {
+            font-size: 20px;
+            font-weight: 700;
+            color: #2d3748;
+            line-height: 1;
+            margin: 0;
+        }
+        .logo-subtitle {
+            font-size: 11px;
+            color: #718096;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin: 0;
+        }
+    </style>
 @endsection
 
 @section('content')
 
 <div class="barra">
-    <img class="barra_logo" src="{{ asset('images/DDDD.png') }}" alt="Logo">
+    <div class="logo-container">
+        <div class="logo-icon">
+            <i class="fas fa-chart-line"></i>
+        </div>
+        <div class="logo-text">
+            <p class="logo-title">AdminPanel</p>
+            <p class="logo-subtitle">Dashboard</p>
+        </div>
+    </div>
     <form method="POST" action="{{ route('logout') }}">
         @csrf
         <button class="logout-btn">
@@ -40,9 +86,9 @@
     </div>
 
     <div class="card">
-        <i class="fas fa-envelope-open-text"></i>
+        <i class="fas fa-cog"></i>
         <h3>{{ $suscripcionesCount }}</h3>
-        <p>Suscripciones</p>
+        <p>Servicios</p>
     </div>
 </div>
 
@@ -50,7 +96,7 @@
 <div class="tabs">
     <div class="tab active" onclick="mostrarTab('usuarios')">Usuarios</div>
     <div class="tab" onclick="mostrarTab('citas')">Citas</div>
-    <div class="tab" onclick="mostrarTab('suscripciones')">Suscripciones</div>
+    <div class="tab" onclick="mostrarTab('servicios')">Servicios</div>
 </div>
 
 {{-- USUARIOS --}}
@@ -215,8 +261,8 @@
     </table>
 </div>
 
-{{-- SUSCRIPCIONES --}}
-<div id="suscripciones" class="content">
+{{-- SERVICIOS --}}
+<div id="servicios" class="content">
 
     @if(session('success'))
         <div class="alert-success">
@@ -224,72 +270,80 @@
         </div>
     @endif
 
-    {{-- Botón agregar --}}
-    <a href="{{ route('admin.suscripciones.create') }}"
-       class="btn"
-       style="margin-bottom:10px;">
-        <i class="fas fa-plus"></i> Agregar Suscripción
-    </a>
-
     <table>
         <thead>
         <tr>
-            <th>ID</th>
-            <th>Correo</th>
-            <th>Registro</th>
-            <th>Estado</th>
+            <th>ID Cita</th>
+            <th>Cliente</th>
+            <th>Evento</th>
+            <th>Fecha Evento</th>
+            <th>Estado Servicios</th>
+            <th>Total</th>
             <th>Acciones</th>
         </tr>
         </thead>
 
         <tbody>
-        @forelse($suscripciones as $s)
+        @forelse($citasConServicios as $cita)
+            @php
+                $servicios = $cita->serviciosContratados;
+                $evento = $cita->evento;
+            @endphp
             <tr>
-                <td>{{ $s->id_suscripcion }}</td>
-                <td>{{ $s->correo }}</td>
-                <td>{{ $s->fecha_registro }}</td>
-
+                <td>{{ $cita->id_cita }}</td>
+                <td>{{ $cita->usuario->nombre ?? $cita->nombre }}</td>
+                <td>{{ $evento->nombre_evento ?? 'N/A' }}</td>
+                <td>{{ $evento->fecha_evento ?? 'N/A' }}</td>
                 <td>
-                    <span class="{{ $s->estado === 'activo' ? 'badge badge-success' : 'badge badge-danger' }}">
-                        {{ ucfirst($s->estado) }}
-                    </span>
+                    @if($servicios)
+                        @if($servicios->estado === 'borrador')
+                            <span class="badge badge-warning">Borrador</span>
+                        @elseif($servicios->estado === 'enviado')
+                            <span class="badge badge-info">Enviado</span>
+                        @elseif($servicios->estado === 'aprobado')
+                            <span class="badge badge-success">Aprobado</span>
+                        @endif
+                    @else
+                        <span class="badge badge-secondary">Sin servicios</span>
+                    @endif
                 </td>
-
                 <td>
-                    {{--Editar --}}
-                    <a href="{{ route('admin.suscripciones.editar', $s->id_suscripcion) }}"
-                       class="btn btn-warning btn-sm">
-                        <i class="fas fa-edit"></i>
-                    </a>
-
-                    {{--Activar / Desactivar --}}
-                    <form action="{{ route('admin.suscripciones.toggle', $s->id_suscripcion) }}"
-                          method="POST"
-                          style="display:inline;">
-                        @csrf
-                        @method('PUT')
-                        <button class="btn btn-secondary btn-sm">
-                            {{ $s->estado === 'activo' ? 'Desactivar' : 'Activar' }}
-                        </button>
-                    </form>
-
-                    {{-- Eliminar --}}
-                    <form action="{{ route('admin.suscripciones.destroy', $s->id_suscripcion) }}"
-                          method="POST"
-                          style="display:inline;"
-                          onsubmit="return confirm('¿Eliminar esta suscripción?')">
-                        @csrf
-                        @method('DELETE')
-                        <button class="btn btn-danger btn-sm">
-                            <i class="fas fa-trash"></i>
-                        </button>
-                    </form>
+                    @if($servicios)
+                        ${{ number_format($servicios->total, 0, ',', '.') }}
+                    @else
+                        -
+                    @endif
+                </td>
+                <td>
+                    @if($servicios)
+                        <a href="{{ route('admin.servicios.editar', $servicios->id_servicio_contratado) }}"
+                           class="btn btn-warning btn-sm">
+                            <i class="fas fa-edit"></i> Editar
+                        </a>
+                        
+                        @if($servicios->estado === 'borrador')
+                            <form action="{{ route('admin.servicios.enviar', $servicios->id_servicio_contratado) }}"
+                                  method="POST"
+                                  style="display:inline;">
+                                @csrf
+                                @method('PUT')
+                                <button class="btn btn-success btn-sm">
+                                    <i class="fas fa-paper-plane"></i> Enviar
+                                </button>
+                            </form>
+                        @endif
+                    @else
+                        <a href="{{ route('admin.servicios.crear', $cita->id_cita) }}"
+                           class="btn btn-primary btn-sm">
+                            <i class="fas fa-plus"></i> Agregar
+                        </a>
+                    @endif
                 </td>
             </tr>
         @empty
             <tr>
-                <td colspan="5" class="sin-registros">
-                    No hay suscripciones registradas
+                <td colspan="7" class="sin-registros">
+                    No hay citas con servicios disponibles
                 </td>
             </tr>
         @endforelse
@@ -310,7 +364,7 @@ function mostrarTab(id){
     document.getElementById(id).classList.add('active');
 }
 
-/* Detecta ?tab=citas en la URL */
+/* Detecta ?tab=citas o ?tab=servicios en la URL */
 const params = new URLSearchParams(window.location.search);
 const tab = params.get('tab');
 
