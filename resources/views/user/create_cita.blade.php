@@ -5,7 +5,7 @@
 @section('styles')
 <style>
     .form-card {
-        max-width: 800px;
+        max-width: 600px;
         margin: 40px auto;
         padding: 30px;
         background: #fff;
@@ -21,22 +21,18 @@
     .form-card label {
         font-weight: 600;
         margin-top: 10px;
+        display: block;
     }
     .form-card .form-control {
         margin-bottom: 15px;
         border-radius: 8px;
         padding: 10px;
         border: 1px solid #ccc;
+        width: 100%;
     }
-    .form-card .form-control.is-invalid {
-        border-color: #dc3545;
-    }
-    .invalid-feedback {
-        display: block;
-        color: #dc3545;
-        font-size: 0.875rem;
-        margin-top: -10px;
-        margin-bottom: 10px;
+    .form-card .form-control:disabled {
+        background-color: #e9ecef;
+        cursor: not-allowed;
     }
     .form-card .button-primary {
         display: inline-block;
@@ -48,12 +44,21 @@
         cursor: pointer;
         font-weight: 600;
         transition: background 0.3s;
+        width: 100%;
+        margin-top: 20px;
     }
     .form-card .button-primary:hover {
         background-color: #0056b3;
     }
-    @media (max-width: 600px) {
-        .form-card { padding: 20px; }
+    .info-evento {
+        background: #e8f4fd;
+        padding: 15px;
+        border-radius: 10px;
+        margin-bottom: 25px;
+    }
+    .info-evento p {
+        margin: 5px 0;
+        color: #34495e;
     }
 </style>
 @endsection
@@ -76,66 +81,82 @@
         <div class="alert alert-success">{{ session('success') }}</div>
     @endif
 
+    {{-- INFORMACIÓN DEL EVENTO --}}
+    <div class="info-evento">
+        <p><strong>Evento:</strong> {{ $evento->nombre_evento }}</p>
+        <p><strong>Tipo:</strong> {{ $evento->tipoevento->descripcion_tipoevento }}</p>
+        <p><strong>Fecha:</strong> {{ \Carbon\Carbon::parse($evento->fecha_evento)->format('d/m/Y') }}</p>
+        <p><strong>Personas:</strong> {{ $evento->cantidad_personas }}</p>
+        <p><strong>Zona:</strong> {{ $evento->zona->nombre_zona ?? 'No especificada' }}</p>
+    </div>
+
     <form action="{{ route('reserva.cita') }}" method="POST" id="formCita">
         @csrf
 
-        <div class="row">
-            <div class="col-md-6">
-                <label>Nombre completo:</label>
-                <input type="text" name="nombre" id="nombre" class="form-control" placeholder="Ej: Santiago Díaz" required>
-                <div class="invalid-feedback" id="nombreError"></div>
-            </div>
-            <div class="col-md-6">
-                <label>Teléfono:</label>
-                <input type="text" name="telefono" class="form-control" placeholder="Ej: 3001234567" required>
-            </div>
-        </div>
+        {{-- DATOS AUTOCOMPLETADOS DEL USUARIO (NO EDITABLES) --}}
+        <label>Nombre completo:</label>
+        <input type="text" 
+               name="nombre" 
+               class="form-control" 
+               value="{{ auth()->user()->nombre }} {{ auth()->user()->apellidos }}" 
+               readonly 
+               disabled
+               style="background-color: #e9ecef;">
+        <input type="hidden" name="nombre" value="{{ auth()->user()->nombre }} {{ auth()->user()->apellidos }}">
 
-        <div class="row">
-            <div class="col-md-6">
-                <label>Correo electrónico:</label>
-                <input type="email" name="correo" class="form-control" placeholder="ejemplo@mail.com" required>
-            </div>
-            <div class="col-md-6">
-                <label>Fecha de la cita:</label>
-                <input type="date" name="fecha_cita" class="form-control" 
-                       min="{{ now()->toDateString() }}" 
-                       max="{{ \Carbon\Carbon::parse($evento->fecha_evento)->subDay()->toDateString() }}" 
-                       required>
-            </div>
-        </div>
+        <label>Correo electrónico:</label>
+        <input type="email" 
+               name="correo" 
+               class="form-control" 
+               value="{{ auth()->user()->email }}" 
+               readonly 
+               disabled
+               style="background-color: #e9ecef;">
+        <input type="hidden" name="correo" value="{{ auth()->user()->email }}">
 
-        <div class="row">
-            <div class="col-md-6">
-                <label>Hora de la cita:</label>
-                <select name="hora_cita" id="hora_cita" class="form-control" required>
-                    @if($horario)
-                        @php
-                            $inicio = \Carbon\Carbon::createFromFormat('H:i:s', $horario->hora_inicio);
-                            $fin = \Carbon\Carbon::createFromFormat('H:i:s', $horario->hora_fin);
-                            $horas = [];
-                            while($inicio < $fin){
-                                $horas[] = $inicio->format('H:i');
-                                $inicio->addHour();
-                            }
-                        @endphp
-                        @foreach($horas as $hora)
-                            <option value="{{ $hora }}">{{ $hora }}</option>
-                        @endforeach
-                    @endif
-                </select>
-            </div>
-            <div class="col-md-6">
-                <label>Tipo de evento:</label>
-                <input type="text" name="tipo_evento" class="form-control" placeholder="Ej: Cumpleaños, Boda" required>
-            </div>
-        </div>
+        {{-- SOLO TELÉFONO ES EDITABLE --}}
+        <label>Teléfono:</label>
+        <input type="text" 
+               name="telefono" 
+               class="form-control" 
+               placeholder="Ej: 3001234567"
+               pattern="[0-9]{10}"
+               title="Debe contener 10 dígitos"
+               maxlength="10"
+               required>
 
-        <input type="hidden" name="id_evento" value="{{ $evento->id_evento ?? '' }}">
+        <label>Fecha de la cita:</label>
+        <input type="date" 
+               name="fecha_cita" 
+               id="fecha_cita"
+               class="form-control" 
+               min="{{ now()->toDateString() }}" 
+               max="{{ \Carbon\Carbon::parse($evento->fecha_evento)->subDay()->toDateString() }}" 
+               required>
 
-        <div style="text-align:center; margin-top:25px;">
-            <button type="submit" class="button-primary">Agendar Cita</button>
-        </div>
+        <label>Hora de la cita:</label>
+        <select name="hora_cita" id="hora_cita" class="form-control" required>
+            <option value="">Seleccione primero una fecha</option>
+            @if($horario)
+                @php
+                    $inicio = \Carbon\Carbon::createFromFormat('H:i:s', $horario->hora_inicio);
+                    $fin = \Carbon\Carbon::createFromFormat('H:i:s', $horario->hora_fin);
+                    $horas = [];
+                    while($inicio < $fin){
+                        $horas[] = $inicio->format('H:i');
+                        $inicio->addHour();
+                    }
+                @endphp
+                @foreach($horas as $hora)
+                    <option value="{{ $hora }}">{{ $hora }}</option>
+                @endforeach
+            @endif
+        </select>
+
+        <input type="hidden" name="id_evento" value="{{ $evento->id_evento }}">
+        <input type="hidden" name="tipo_evento" value="{{ $evento->tipoevento->descripcion_tipoevento }}">
+
+        <button type="submit" class="button-primary">Agendar Cita</button>
     </form>
 </div>
 @endsection
@@ -143,100 +164,9 @@
 @section('scripts')
 <script>
 document.addEventListener('DOMContentLoaded', function () {
-    const fechaInput = document.querySelector('input[name="fecha_cita"]');
+    const fechaInput = document.getElementById('fecha_cita');
     const horaSelect = document.getElementById('hora_cita');
-    const nombreInput = document.getElementById('nombre');
-    const nombreError = document.getElementById('nombreError');
-    const formCita = document.getElementById('formCita');
 
-    // Validación del nombre en tiempo real
-    if (nombreInput) {
-        nombreInput.addEventListener('input', function (e) {
-            let valor = e.target.value;
-            
-            // Eliminar números
-            valor = valor.replace(/[0-9]/g, '');
-            
-            // Eliminar puntos y comas
-            valor = valor.replace(/[.,]/g, '');
-            
-            // Eliminar múltiples espacios consecutivos y dejar solo uno
-            valor = valor.replace(/\s+/g, ' ');
-            
-            // Actualizar el valor del input
-            e.target.value = valor;
-            
-            // Validar en tiempo real
-            validarNombre(valor);
-        });
-
-        // Validar al perder el foco
-        nombreInput.addEventListener('blur', function () {
-            validarNombre(this.value);
-        });
-    }
-
-    // Función de validación del nombre
-    function validarNombre(valor) {
-        // Limpiar espacios al inicio y final
-        valor = valor.trim();
-        
-        // Validar que no esté vacío
-        if (valor === '') {
-            mostrarError('El nombre es obligatorio');
-            return false;
-        }
-        
-        // Validar que tenga al menos 2 caracteres
-        if (valor.length < 2) {
-            mostrarError('El nombre debe tener al menos 2 caracteres');
-            return false;
-        }
-        
-        // Validar que solo contenga letras y espacios (sin números, puntos, comas)
-        const regex = /^[a-záéíóúñüA-ZÁÉÍÓÚÑÜ\s]+$/;
-        if (!regex.test(valor)) {
-            mostrarError('El nombre solo puede contener letras y espacios');
-            return false;
-        }
-        
-        // Validar que no tenga espacios al inicio o al final
-        if (valor !== nombreInput.value.trim()) {
-            mostrarError('No se permiten espacios al inicio o al final');
-            return false;
-        }
-        
-        // Si pasa todas las validaciones
-        limpiarError();
-        return true;
-    }
-
-    // Mostrar mensaje de error
-    function mostrarError(mensaje) {
-        nombreInput.classList.add('is-invalid');
-        nombreError.textContent = mensaje;
-    }
-
-    // Limpiar mensaje de error
-    function limpiarError() {
-        nombreInput.classList.remove('is-invalid');
-        nombreError.textContent = '';
-    }
-
-    // Validación al enviar el formulario
-    if (formCita) {
-        formCita.addEventListener('submit', function (e) {
-            const nombreValor = nombreInput.value.trim();
-            
-            if (!validarNombre(nombreValor)) {
-                e.preventDefault();
-                nombreInput.focus();
-                return false;
-            }
-        });
-    }
-
-    // Código existente para las horas
     if (!fechaInput || !horaSelect) return;
 
     fechaInput.addEventListener('change', function () {

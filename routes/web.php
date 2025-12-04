@@ -102,6 +102,19 @@ Route::prefix('servicios')->name('admin.servicios.')->group(function () {
         ->name('enviar');
 });
 
+Route::middleware(['auth', 'admin'])->group(function () {
+    
+    // ... otras rutas de admin ...
+
+    // Eventos (Admin)
+    Route::get('/admin/eventos/{id_evento}/editar', [App\Http\Controllers\EventoController::class, 'editarPorAdmin'])
+        ->name('admin.eventos.editar');
+    
+    Route::put('/admin/eventos/{id_evento}', [App\Http\Controllers\EventoController::class, 'updatePorAdmin'])
+        ->name('admin.eventos.update');
+
+});
+
 
     // Citas CRUD
     Route::get('/citas', [CitaAdminController::class, 'index'])->name('admin.citas.index');
